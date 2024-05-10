@@ -1,10 +1,9 @@
-<script setup>
-import { defineProps } from "vue"
-const { icon, text, isSelect } = defineProps({
-  icon: "string",
-  text: "string",
-  isSelect: "boolean",
-})
+<script setup lang="ts">
+const { icon, text, isSelect } = defineProps<{
+  icon: string,
+  text?: string,
+  isSelect?: boolean,
+}>()
 </script>
 
 <template>

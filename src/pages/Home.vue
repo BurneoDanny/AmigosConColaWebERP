@@ -20,7 +20,7 @@ export interface Animal {
   estado: boolean
   tipo: string
 }
-const animales: Animal[] = ref(animalsJSON)
+const animales = ref<Animal[]>(animalsJSON)
 const search = ref("")
 const isDogSelect = ref(false)
 const isCatSelect = ref(false)
@@ -66,6 +66,6 @@ const selectCats = () => {
   </div>
   <section class="grid gap-3 md:grid-cols-4 mx-5 mt-2">
 
-    <AnimalCard v-for="(animal, index) in animales" :key="animal.id" :animal="animal" />
+    <AnimalCard v-for="(animal) in animales" :key="animal.id" :animal="animal" />
   </section>
 </template>
