@@ -20,6 +20,7 @@ export interface Animal {
   estado: boolean
   tipo: string
 }
+
 const animales = ref<Animal[]>(animalsJSON)
 const search = ref("")
 const isDogSelect = ref(false)
@@ -42,8 +43,6 @@ const selectCats = () => {
   isCatSelect.value = true
   isDogSelect.value = false
 }
-
-
 
 </script>
 

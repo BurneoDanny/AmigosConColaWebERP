@@ -10,9 +10,12 @@
   },
   "dependencies": {
     "flowbite": "^2.3.0",
-    "vue": "^3.4.21"
+    "vue": "^3.4.21",
+    "vue-router": "^4.3.2"
   },
   "devDependencies": {
+    "@iconify/json": "^2.2.208",
+    "@iconify/tailwind": "^1.0.1",
     "@vitejs/plugin-vue": "^5.0.4",
     "@vue/typescript-plugin": "^2.0.17",
     "autoprefixer": "^10.4.19",
