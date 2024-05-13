@@ -1,8 +1,9 @@
-import { createApp } from 'vue'
 import './index.css'
-import App from './App.vue'
 import router from './routes'
+import {setup} from "@storybook/vue3";
 
-const app = createApp(App)
-app.use(router)
-app.mount('#app')
+setup(app => {
+    app
+        .use(router)
+        .mount("#app")
+})
