@@ -24,4 +24,10 @@ jobs:
       - run: npm ci
 
       - name: Check code formatting
+        id: prettier
         run: npm run check-formatting
+        continue-on-error: true
+
+      - name: Check prettier failures
+        if: steps.prettier.outcome != 'success'
+        run: echo "::error::Code is not properly formatted with prettier" && exit 1
