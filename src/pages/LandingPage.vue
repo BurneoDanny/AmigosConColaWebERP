@@ -1,5 +1,9 @@
 <script lang="ts" setup>
 import logoUrl from "../assets/images/amigos-con-cola-logo.png";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+const onIniciar = () => router.push({ path: "/home" });
 </script>
 
 <template>
@@ -30,6 +34,7 @@ import logoUrl from "../assets/images/amigos-con-cola-logo.png";
         <button
           type="button"
           class="text-surface px-7 shadow-3xl bg-blue-500 hover:bg-blue-400 rounded-full text-xs md:text-base sm:text-base sm:px-8 lg:text-xl py-3 md:px-10 md:py-4 lg:px-12 lg:py-5 font-semibold"
+          @click="onIniciar"
         >
           INICIAR
         </button>
