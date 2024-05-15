@@ -1,4 +1,4 @@
-name: Format with Prettier
+name: Check code formatting with Prettier
 
 on:
   pull_request:
@@ -16,7 +16,12 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
 
-      - name: Format code
-        uses: creyD/prettier_action@v4.3
+      - name: Setup node
+        uses: actions/setup-node@v4
         with:
-          prettier_options: --write **/*.{js,ts,vue}
+          node-version: "20"
+
+      - run: npm run ci
+
+      - name: Check code formatting
+        run: npm run check-formatting
