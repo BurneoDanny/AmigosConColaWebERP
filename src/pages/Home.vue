@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import DesparasitacionModal from "@/components/DesparasitacionModal.vue";
 import AddButton from "@/components/home_page/AddButton.vue";
 import SearchInput from "@/components/home_page/SearchInput.vue";
 import FilterButton from "@/components/home_page/FilterButton.vue";
@@ -9,6 +10,9 @@ import dogIcon from "@/assets/home_page/dog.svg";
 import filterIcon from "@/assets/home_page/filter.svg";
 import animalsJSON from "@/fakedata.json";
 import { ref, watch } from "vue";
+
+import { onMounted } from "vue";
+import { initFlowbite } from "flowbite";
 
 export interface Animal {
   id: number;
@@ -28,7 +32,7 @@ watch(search, () => {
   isCatSelect.value = false;
   isDogSelect.value = false;
   animales.value = animalsJSON.filter((animal) =>
-    animal.nombre.toLowerCase().includes(search.value.toLowerCase()),
+    animal.nombre.toLowerCase().includes(search.value.toLowerCase())
   );
 });
 
@@ -43,6 +47,10 @@ const selectCats = () => {
   isCatSelect.value = true;
   isDogSelect.value = false;
 };
+
+onMounted(() => {
+  initFlowbite();
+});
 </script>
 
 <template>
