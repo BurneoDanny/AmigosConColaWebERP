@@ -32,7 +32,7 @@ watch(search, () => {
   isCatSelect.value = false;
   isDogSelect.value = false;
   animales.value = animalsJSON.filter((animal) =>
-    animal.nombre.toLowerCase().includes(search.value.toLowerCase())
+    animal.nombre.toLowerCase().includes(search.value.toLowerCase()),
   );
 });
 

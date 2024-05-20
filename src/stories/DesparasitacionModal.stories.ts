@@ -1,15 +1,17 @@
 import { Meta, StoryObj } from "@storybook/vue3";
 import DesparasitacionModal from "@/components/DesparasitacionModal.vue";
 
-const meta: Meta<typeof DesparasitacionModal> = { component: DesparasitacionModal };
+const meta: Meta<typeof DesparasitacionModal> = {
+  component: DesparasitacionModal,
+};
 
 export default meta;
 
 type Story = StoryObj<typeof DesparasitacionModal>;
 
 export const Primary: Story = () => ({
-    components: { DesparasitacionModal },
-    template: `
+  components: { DesparasitacionModal },
+  template: `
     <div>
       <button
         data-modal-target="default-modal"
