@@ -2,13 +2,12 @@
 import maleIcon from "../../assets/home_page/male.svg";
 import femaleIcon from "../../assets/home_page/female.svg";
 import { Animal } from "@pages/Home.vue";
+import { AnimalGender } from "@/enums/animal_gender.ts";
 
-const { animal } = defineProps<{
-  animal: Animal;
-}>();
+const { animal } = defineProps<{ animal: Animal }>();
 
-const genero = animal.genero === "Macho" ? maleIcon : femaleIcon;
-const adoptado = animal.estado ? "ADOPTADO" : "NO ADOPTADO";
+const genero = animal.genero === AnimalGender.MALE ? maleIcon : femaleIcon;
+const adoptado = animal.adoptado ? "ADOPTADO" : "NO ADOPTADO";
 </script>
 
 <template>
@@ -36,8 +35,8 @@ const adoptado = animal.estado ? "ADOPTADO" : "NO ADOPTADO";
         </p>
         <span
           :class="{
-            'text-[#11720A] font-semibold': animal.estado,
-            'text-red-950 font-semibold': !animal.estado,
+            'text-[#11720A] font-semibold': animal.adoptado,
+            'text-red-950 font-semibold': !animal.adoptado,
           }"
           >{{ adoptado }}</span
         >

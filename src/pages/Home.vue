@@ -7,8 +7,9 @@ import catIcon from "@/assets/home_page/cat.svg";
 import bellIcon from "@/assets/home_page/bell.svg";
 import dogIcon from "@/assets/home_page/dog.svg";
 import filterIcon from "@/assets/home_page/filter.svg";
-import animalsJSON from "@/fakedata.json";
-import { ref, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
+import { useAnimals } from "@stores/animalStore.ts";
+import { AnimalSpecies } from "@/enums/animal_species.ts";
 
 export interface Animal {
   id: number;
@@ -16,30 +17,60 @@ export interface Animal {
   edad: number;
   genero: string;
   imagen: string;
-  estado: boolean;
-  tipo: string;
+  adoptado: boolean;
+  especie: string;
 }
 
-const animales = ref<Animal[]>(animalsJSON);
+const animals = useAnimals();
+
+let animales = [] as Animal[];
+const animalesFiltered = ref<Animal[]>(animales);
+
 const search = ref("");
 const isDogSelect = ref(false);
 const isCatSelect = ref(false);
+
 watch(search, () => {
   isCatSelect.value = false;
   isDogSelect.value = false;
-  animales.value = animalsJSON.filter((animal) =>
+  animalesFiltered.value = animales.filter((animal) =>
     animal.nombre.toLowerCase().includes(search.value.toLowerCase()),
   );
 });
 
+onMounted(async () => {
+  // TODO: Manejar paginacion.
+  const as = await animals.getPaginated();
+  animales = as;
+  animalesFiltered.value = as;
+});
+
 const selectDogs = () => {
-  animales.value = animalsJSON.filter((animal) => animal.tipo === "Perro");
+  if (isDogSelect.value) {
+    isDogSelect.value = false;
+    animalesFiltered.value = animales;
+    return;
+  }
+
+  animalesFiltered.value = animales.filter(
+    (animal) => animal.especie === AnimalSpecies.DOG,
+  );
+
   isDogSelect.value = true;
   isCatSelect.value = false;
 };
 
 const selectCats = () => {
-  animales.value = animalsJSON.filter((animal) => animal.tipo === "Gato");
+  if (isCatSelect.value) {
+    isCatSelect.value = false;
+    animalesFiltered.value = animales;
+    return;
+  }
+
+  animalesFiltered.value = animales.filter(
+    (animal) => animal.especie === AnimalSpecies.CAT,
+  );
+
   isCatSelect.value = true;
   isDogSelect.value = false;
 };
@@ -78,7 +109,7 @@ const selectCats = () => {
     </div>
     <section class="gap-x-5 flex md:gap-x-5 lg:gap-x-11 gap-y-9 flex-wrap mt-2">
       <RouterLink
-        v-for="animal in animales"
+        v-for="animal in animalesFiltered"
         :key="animal.id"
         :to="`/pet-info/${animal.id}`"
         class="gap-x-5 flex md:gap-x-5 lg:gap-x-11 gap-y-9 flex-wrap mt-2"
