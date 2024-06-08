@@ -30,15 +30,21 @@ export const useAnimals = defineStore("animales", () => {
     if (page < 0) return [];
     if (perPage < 0) return [];
 
-    const response = await fetch(
-      `${API_BASE}/api/animals?page=${page}&perPage=${perPage}`,
-    );
+    try {
+      const response = await fetch(
+        `${API_BASE}/api/animals?page=${page}&perPage=${perPage}`,
+      );
 
-    if (!response.ok) {
+      if (!response.ok) {
+        console.error(`Error fetching animals: ${response.statusText}`);
+        return [];
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching animals:", error);
       return [];
     }
-
-    return await response.json();
   }
 
   /**
@@ -74,8 +80,23 @@ export const useAnimals = defineStore("animales", () => {
     }
   }
 
+  /**
+   * Get a single animal by its id.
+   * @param id The number that identifies the animal
+   * @return An animal.
+   */
+  async function getAnimalById(id: number) {
+    const response = await fetch(`${API_BASE}/api/animals/${id}`);
+    if (!response.ok) {
+      return null;
+    }
+
+    return await response.json();
+  }
+
   return {
     getPaginated,
     postAnimal,
+    getAnimalById,
   };
 });
