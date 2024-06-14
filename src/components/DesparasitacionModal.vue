@@ -5,11 +5,11 @@ import { Datepicker } from "flowbite-datepicker";
 
 onMounted(() => {
   initFlowbite();
-  const dateInput = document.getElementById('datepicker') as HTMLInputElement;
+  const dateInput = document.getElementById("datepicker") as HTMLInputElement;
   if (dateInput) {
     new Datepicker(dateInput, {
-      format: 'mm/dd/yyyy',
-      autohide: true
+      format: "mm/dd/yyyy",
+      autohide: true,
     });
   }
 });
@@ -123,7 +123,7 @@ const closeDropdown = (state: string) => {
                   datepicker
                   type="text"
                   class="bg-gray-50 border border-gray-500 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="Escoja un dia" 
+                  placeholder="Escoja un dia"
                 />
               </div>
             </div>
