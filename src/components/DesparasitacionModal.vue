@@ -1,9 +1,17 @@
 <script lang="ts" setup>
 import { onMounted, ref } from "vue";
 import { initFlowbite } from "flowbite";
+import { Datepicker } from "flowbite-datepicker";
 
 onMounted(() => {
   initFlowbite();
+  const dateInput = document.getElementById('datepicker') as HTMLInputElement;
+  if (dateInput) {
+    new Datepicker(dateInput, {
+      format: 'mm/dd/yyyy',
+      autohide: true
+    });
+  }
 });
 const isDropdownOpen = ref(false);
 const dropDownState = ref("Interno");
@@ -111,11 +119,11 @@ const closeDropdown = (state: string) => {
                   </svg>
                 </div>
                 <input
+                  id="datepicker"
                   datepicker
-                  datepicker-format="mm/dd/yyyy"
                   type="text"
                   class="bg-gray-50 border border-gray-500 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="Select date"
+                  placeholder="Escoja un dia" 
                 />
               </div>
             </div>
@@ -124,7 +132,7 @@ const closeDropdown = (state: string) => {
               <input
                 type="text"
                 v-model="inputValue"
-                placeholder="1 kg"
+                placeholder="Activyl"
                 class="w-1/2"
               />
             </div>
@@ -142,7 +150,7 @@ const closeDropdown = (state: string) => {
               <input
                 type="text"
                 v-model="inputValue"
-                placeholder="1 kg"
+                placeholder="Pastilla"
                 class="w-1/2"
               />
             </div>
