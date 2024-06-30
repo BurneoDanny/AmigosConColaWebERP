@@ -67,7 +67,10 @@ export const useAnimals = defineStore("animales", () => {
    * @return The created animal.
    */
   // En src/stores/animalStore.ts
-  async function createAnimal(animal: Animal, image: File | null): Promise<Animal | null> {
+  async function createAnimal(
+    animal: Animal,
+    image: File | null,
+  ): Promise<Animal | null> {
     // Validar el argumento animal
     if (!animal || typeof animal !== "object") {
       console.error("Invalid argument: animal must be an object");
