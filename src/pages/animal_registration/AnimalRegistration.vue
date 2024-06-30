@@ -60,11 +60,9 @@ const previousStep = () => {
   }
 };
 
-// En la función nextStep
 const nextStep = async (values: any) => {
   if (step.value === 2) {
-    values = { ...values, imagen: values.imagen?.imageUrl };
-    const res = await animales.postAnimal(values);
+    const res = await animales.createAnimal(values, values.imagen?.image);
     if (!res) {
       showFailToast.value = true;
       isSuccess.value = false;
@@ -97,12 +95,7 @@ const nextStep = async (values: any) => {
         <StepperIndicator v-model="step" />
       </div>
     </div>
-    <Form
-      v-slot="{ values, isSubmitting }"
-      :validation-schema="currentSchema"
-      as="div"
-      @submit="nextStep"
-    >
+    <Form v-slot="{ values, isSubmitting }" :validation-schema="currentSchema" as="div" @submit="nextStep">
       <form class="relative">
         <template v-if="step === 0">
           <StepOne :formValues="values" />
@@ -115,69 +108,43 @@ const nextStep = async (values: any) => {
         </template>
         <div class="flex items-center justify-center mt-7 mb-5">
           <div class="flex justify-evenly gap-10">
-            <button
-              :disabled="isSubmitting || isSuccess"
+            <button :disabled="isSubmitting || isSuccess"
               class="w-24 font-semibold text-black bg-white border border-primary focus:outline-none focus:ring-4 focus:ring-blue-300 rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-              type="button"
-              @click="previousStep"
-            >
+              type="button" @click="previousStep">
               Atrás
             </button>
-            <button
-              v-if="step !== 2"
+            <button v-if="step !== 2"
               class="font-semibold text-black bg-primary focus:outline-none focus:ring-4 focus:ring-blue-300 rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-              type="submit"
-            >
+              type="submit">
               Siguiente
             </button>
-            <button
-              v-if="step === 2"
-              :disabled="isSubmitting || isSuccess"
+            <button v-if="step === 2" :disabled="isSubmitting || isSuccess"
               class="font-semibold text-black bg-primary focus:outline-none focus:ring-4 focus:ring-blue-300 rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-              type="submit"
-            >
+              type="submit">
               Terminar
             </button>
           </div>
         </div>
       </form>
     </Form>
-    <div
-      v-if="showSuccessToast"
-      id="toast-bottom-right"
+    <div v-if="showSuccessToast" id="toast-bottom-right"
       class="justify-start flex-shrink-0 h-10 text-green-500 bg-green-100 rounded-lg fixed flex items-center w-full max-w-xs p-4 space-x-4 divide-x rtl:divide-x-reverse divide-gray-200 shadow right-5 bottom-5 dark:text-gray-400 dark:divide-gray-700 space-x dark:bg-gray-800"
-      role="alert"
-    >
-      <svg
-        aria-hidden="true"
-        class="w-5 h-5"
-        fill="currentColor"
-        viewBox="0 0 20 20"
-        xmlns="http://www.w3.org/2000/svg"
-      >
+      role="alert">
+      <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+        xmlns="http://www.w3.org/2000/svg">
         <path
-          d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"
-        />
+          d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
       </svg>
       <span class="sr-only">Check icon</span>
       <p>Datos enviados correctamente</p>
     </div>
-    <div
-      v-if="showFailToast"
-      id="toast-bottom-right"
+    <div v-if="showFailToast" id="toast-bottom-right"
       class="items-center justify-start flex-shrink-0 h-10 text-orange-500 bg-orange-100 rounded-lg fixed flex w-full max-w-xs p-4 space-x-4 divide-x rtl:divide-x-reverse divide-gray-200 shadow right-5 bottom-5 dark:text-gray-400 dark:divide-gray-700 space-x dark:bg-gray-800"
-      role="alert"
-    >
-      <svg
-        aria-hidden="true"
-        class="w-5 h-5"
-        fill="currentColor"
-        viewBox="0 0 20 20"
-        xmlns="http://www.w3.org/2000/svg"
-      >
+      role="alert">
+      <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+        xmlns="http://www.w3.org/2000/svg">
         <path
-          d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM10 15a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm1-4a1 1 0 0 1-2 0V6a1 1 0 0 1 2 0v5Z"
-        />
+          d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM10 15a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm1-4a1 1 0 0 1-2 0V6a1 1 0 0 1 2 0v5Z" />
       </svg>
       <span class="sr-only">Warning icon</span>
       <p>Error al crear el animal</p>

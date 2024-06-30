@@ -67,20 +67,32 @@ export const useAnimals = defineStore("animales", () => {
    * @return The created animal.
    */
   // En src/stores/animalStore.ts
-  async function postAnimal(animal: Animal): Promise<Animal | null> {
+  async function createAnimal(animal: Animal, image: File | null): Promise<Animal | null> {
     // Validar el argumento animal
     if (!animal || typeof animal !== "object") {
       console.error("Invalid argument: animal must be an object");
       return null;
     }
 
+    const formData = new FormData();
+
+    formData.set("nombre", animal.nombre);
+    formData.set("genero", animal.genero);
+    formData.set("especie", animal.especie);
+    formData.set("edad", animal.edad.toString());
+    formData.set("codigo", animal.codigo);
+    formData.set("ubicacion", animal.ubicacion);
+    formData.set("historia", animal.historia);
+    formData.set("peso", animal.peso.toString());
+
+    if (image !== null) {
+      formData.set("imagen", image);
+    }
+
     try {
       const response = await fetch(`${API_BASE}/api/animals`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(animal),
+        body: formData,
       });
 
       if (!response.ok) {
@@ -112,7 +124,7 @@ export const useAnimals = defineStore("animales", () => {
 
   return {
     getPaginated,
-    postAnimal,
+    createAnimal,
     getAnimalById,
   };
 });

@@ -20,7 +20,7 @@ const inputHandler = (event: Event) => {
     imageName.value = file.name;
     imageUrl.value = URL.createObjectURL(file);
     startUploadSimulation();
-    handleChange({ imageName: imageName.value, imageUrl: imageUrl.value });
+    handleChange({ imageName: imageName.value, imageUrl: imageUrl.value, image: file });
   }
 };
 
@@ -50,28 +50,18 @@ const cancelHandler = () => {
       <Field v-slot="{ errorMessage }" keep-value name="imagen">
         <label
           class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
-          for="dropzone-file"
-        >
+          for="dropzone-file">
           <div class="flex flex-col items-center justify-center pt-5 pb-6">
             <img :src="upload" alt="upload svg" />
             <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
-              <span class="font-semibold text-primary"
-                >Click para subir imagen</span
-              >
+              <span class="font-semibold text-primary">Click para subir imagen</span>
               o arrastra y suelta
             </p>
             <p class="text-xs text-gray-500 dark:text-gray-400">
               SVG, PNG, JPG or GIF (MAX. 800x400px)
             </p>
           </div>
-          <input
-            id="dropzone-file"
-            accept="image/*"
-            class="hidden"
-            name="imagen"
-            type="file"
-            @input="inputHandler"
-          />
+          <input id="dropzone-file" accept="image/*" class="hidden" name="imagen" type="file" @input="inputHandler" />
           <span class="block mt-2 text-sm text-red-600 dark:text-red-500">
             {{ errorMessage }}
           </span>
@@ -82,27 +72,18 @@ const cancelHandler = () => {
     <div v-if="imageName" class="mt-5 w-2/3">
       <h2>Subiendo archivo</h2>
       <div
-        class="flex justify-between items-center p-3 text-base font-bold text-gray-900 rounded-lg bg-gray-50 hover:bg-gray-100 group hover:shadow dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-white"
-      >
+        class="flex justify-between items-center p-3 text-base font-bold text-gray-900 rounded-lg bg-gray-50 hover:bg-gray-100 group hover:shadow dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-white">
         <div class="items-center flex">
-          <img
-            v-if="imageUrl"
-            :src="imageUrl"
-            alt="Vista previa de la imagen"
-            class="h-4"
-          />
+          <img v-if="imageUrl" :src="imageUrl" alt="Vista previa de la imagen" class="h-4" />
           <span class="flex-1 truncate w-32 md:w-full ms-3 whitespace-nowrap">{{
             imageName
-          }}</span>
+            }}</span>
         </div>
         <button @click="cancelHandler">
           <img :src="cancel" alt="boton cancelar" />
         </button>
       </div>
-      <div
-        :style="{ width: `${progress}%` }"
-        class="bg-green-500 h-1 rounded-full"
-      ></div>
+      <div :style="{ width: `${progress}%` }" class="bg-green-500 h-1 rounded-full"></div>
     </div>
   </div>
 </template>
