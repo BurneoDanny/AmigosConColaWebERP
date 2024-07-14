@@ -1,9 +1,26 @@
 <script lang="ts" setup>
-import ButtonAddAnimals from "./ButtonAddAnimals.vue";
+import { useAseos } from "@/stores/aseoStore";
 import { ref } from "vue";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
+const idAnimal = parseInt(route.params.id as string);
+
+const aseos = useAseos(idAnimal);
 
 const fecha = ref("");
 const tipo_aseo = ref("");
+
+const postAseo = async () => {
+  aseos.create({
+    idAnimal,
+    fecha: fecha.value,
+    tipo: tipo_aseo.value,
+  });
+
+  fecha.value = "";
+  tipo_aseo.value = "";
+};
 </script>
 
 <template>
@@ -53,20 +70,6 @@ const tipo_aseo = ref("");
               type="date"
             />
           </div>
-          <div
-            class="flex border border-primary w-[16rem] sm:w-[16.6rem] md:w-[21.5rem] lg:w-[35.7rem] h-[6rem] mb-8 items-start text-[0.8rem] sm:text-[0.8rem] md:text-[0.9rem] lg:text-[1.2rem]"
-          >
-            <div class="flex-1 ml-1">
-              <h3
-                class="flex font-bold m-3 lg:text-base sm:m-3 md:m-3 lg:m-3 text-[0.8rem] md:text-[0.9rem] sm:text-[0.9rem]"
-              >
-                Animales
-              </h3>
-            </div>
-            <div>
-              <ButtonAddAnimals />
-            </div>
-          </div>
 
           <button
             class="bg-surface drop-shadow font-normal border border-gray-200 hover:bg-gray-100 hover:text-primary hover:font-bold px-4 shadow-3xl rounded-full text-xs md:text-sm sm:text-sm sm:px-5 lg:text-md py-3 md:px-6 md:py-2.5 lg:px-8 lg:py-2.5 mr-4 sm:mr-10 md:mr-10 lg:mr-10 lg:text-base"
@@ -79,6 +82,7 @@ const tipo_aseo = ref("");
             class="bg-primary drop-shadow text-white hover:bg-primary/75 hover:font-bold font-medium px-5 shadow-3xl rounded-full text-xs md:text-sm sm:text-sm sm:px-5 lg:text-md py-3 md:px-6 md:py-2.5 lg:px-8 lg:py-2.5 lg:text-base"
             data-modal-hide="aseo-modal"
             type="button"
+            @click="postAseo"
           >
             Agregar
           </button>
@@ -87,5 +91,3 @@ const tipo_aseo = ref("");
     </div>
   </div>
 </template>
-
-<style scoped></style>

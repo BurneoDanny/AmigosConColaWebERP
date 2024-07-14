@@ -13,6 +13,8 @@
     "check-formatting": "prettier --check **/*.{js,ts,vue}"
   },
   "dependencies": {
+    "@tanstack/vue-query": "^5.51.1",
+    "axios": "^1.7.2",
     "flowbite": "^2.3.0",
     "pinia": "^2.1.7",
     "vee-validate": "^4.12.8",

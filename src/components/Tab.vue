@@ -11,13 +11,16 @@ import VacunaPhoto from "@/components/vacunas/VacunaPhoto.vue";
 import VacunaInfo from "@/components/vacunas/VacunaInfo.vue";
 import AseoModal from "@/components/animal_details/AseoModal.vue";
 import DesparasitacionModal from "@/components/animal_details/DesparasitacionModal.vue";
-
-const vacunas = useVacunas();
+import { useAseos } from "@/stores/aseoStore";
+import AseoInfo from "@/components/aseos/AseoInfo.vue";
 
 const idAnimal = ref();
 const route = useRoute();
 
 idAnimal.value = route.params.id;
+
+const vacunas = useVacunas();
+const aseos = useAseos(parseInt(route.params.id as string));
 
 const props = defineProps<{
   pet: Animal | null;
@@ -112,7 +115,7 @@ onMounted(() => {
         </li>
       </ul>
     </div>
-    <div id="default-styled-tab-content">
+    <div id="default-styled-tab-content" class="overflow-auto">
       <div
         id="styled-profile"
         aria-labelledby="profile-tab"
@@ -170,6 +173,10 @@ onMounted(() => {
           data-modal-toggle="aseo-modal"
         />
         <AseoModal />
+
+        <div v-for="aseo in aseos.items" class="flex mb-4">
+          <AseoInfo :fecha="aseo.fecha" :tipo="aseo.tipo" />
+        </div>
       </div>
     </div>
   </div>

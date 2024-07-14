@@ -1,0 +1,70 @@
+import { defineStore } from "pinia";
+import _ from "lodash";
+import {
+  QueryFunctionContext,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/vue-query";
+import { apiClient } from "@/axios";
+
+export interface Aseo {
+  id: number;
+  id_animal: number;
+  fecha: string;
+  tipo: string;
+}
+
+export interface NewAseo {
+  idAnimal: number;
+  fecha: string;
+  tipo: string;
+}
+
+const fetchAseos = ({ queryKey }: QueryFunctionContext): Promise<Aseo[]> => {
+  return apiClient
+    .get<Aseo[]>(`/api/animales/${queryKey[1]}/aseos`)
+    .then((res) => res.data);
+};
+
+const postAseos = (newAseo: NewAseo): Promise<Aseo | null> => {
+  return apiClient
+    .post(
+      `/api/animales/${newAseo.idAnimal}/aseos`,
+      _.omit(newAseo, ["idAnimal"])
+    )
+    .then((res) => res.data);
+};
+
+export const useAseos = (idAnimal: number) => {
+  return defineStore("aseos", () => {
+    const queryClient = useQueryClient();
+
+    const { isError, data, error } = useQuery({
+      queryKey: ["aseos", idAnimal],
+      queryFn: fetchAseos,
+    });
+
+    const {
+      isError: isMutationError,
+      error: mutationError,
+      mutate,
+      isSuccess,
+    } = useMutation({
+      mutationFn: postAseos,
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["aseos", idAnimal] });
+      },
+    });
+
+    return {
+      isError,
+      error,
+      items: data,
+      create: mutate,
+      isSuccess,
+      isMutationError,
+      mutationError,
+    };
+  })();
+};
