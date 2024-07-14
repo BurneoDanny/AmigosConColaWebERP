@@ -31,7 +31,7 @@ const postAseos = (newAseo: NewAseo): Promise<Aseo | null> => {
   return apiClient
     .post(
       `/api/animales/${newAseo.idAnimal}/aseos`,
-      _.omit(newAseo, ["idAnimal"])
+      _.omit(newAseo, ["idAnimal"]),
     )
     .then((res) => res.data);
 };
