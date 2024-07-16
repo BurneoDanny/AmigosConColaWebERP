@@ -1,5 +1,10 @@
 import { apiClient } from "@/axios";
-import { QueryFunctionContext, useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
+import {
+  QueryFunctionContext,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/vue-query";
 import { defineStore } from "pinia";
 
 export interface Vaccine {
@@ -9,8 +14,8 @@ export interface Vaccine {
 }
 
 export interface PostVacunaParams {
-  vaccine: Vaccine,
-  idAnimal: number,
+  vaccine: Vaccine;
+  idAnimal: number;
 }
 
 /**
@@ -19,9 +24,7 @@ export interface PostVacunaParams {
  * @param vaccine The vaccine to create.
  * @return The created vaccine.
  */
-async function postVacuna(
-  params: PostVacunaParams,
-): Promise<Vaccine | null> {
+async function postVacuna(params: PostVacunaParams): Promise<Vaccine | null> {
   const vaccine = params.vaccine;
   const idAnimal = params.idAnimal;
 
@@ -42,9 +45,13 @@ async function postVacuna(
   }
 }
 
-async function getVacunas({ queryKey }: QueryFunctionContext): Promise<Vaccine[] | null> {
+async function getVacunas({
+  queryKey,
+}: QueryFunctionContext): Promise<Vaccine[] | null> {
   try {
-    const response = await apiClient.get(`/api/animales/${queryKey[1]}/vacunaciones`);
+    const response = await apiClient.get(
+      `/api/animales/${queryKey[1]}/vacunaciones`,
+    );
     return response.data;
   } catch (error: any) {
     console.error(error.message);
@@ -52,26 +59,27 @@ async function getVacunas({ queryKey }: QueryFunctionContext): Promise<Vaccine[]
   }
 }
 
-export const useVacunas = (idAnimal: number) => defineStore("vacunas", () => {
-  const queryClient = useQueryClient();
+export const useVacunas = (idAnimal: number) =>
+  defineStore("vacunas", () => {
+    const queryClient = useQueryClient();
 
-  const { data } = useQuery({
-    queryKey: ["vacunas", idAnimal],
-    queryFn: getVacunas,
-  })
+    const { data } = useQuery({
+      queryKey: ["vacunas", idAnimal],
+      queryFn: getVacunas,
+    });
 
-  const { mutateAsync, error, isError, isSuccess } = useMutation({
-    mutationFn: postVacuna,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["vacunas", idAnimal] });
-    }
-  })
+    const { mutateAsync, error, isError, isSuccess } = useMutation({
+      mutationFn: postVacuna,
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["vacunas", idAnimal] });
+      },
+    });
 
-  return {
-    items: data,
-    create: mutateAsync,
-    creationError: error,
-    isCreationError: isError,
-    isCreationSuccess: isSuccess,
-  };
-})();
+    return {
+      items: data,
+      create: mutateAsync,
+      creationError: error,
+      isCreationError: isError,
+      isCreationSuccess: isSuccess,
+    };
+  })();
