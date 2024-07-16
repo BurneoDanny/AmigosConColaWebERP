@@ -3,19 +3,17 @@ import { useVacunas, Vaccine } from "@stores/vacunaStore.ts";
 import { computed, ref } from "vue";
 import { useRoute } from "vue-router";
 
-const vacunas = useVacunas();
-
 const idAnimal = ref();
 const route = useRoute();
 const showSuccessToast = ref(false);
 const showFailToast = ref(false);
 idAnimal.value = route.params.id;
 
+const vacunas = useVacunas(parseInt(idAnimal.value));
+
 let examen_previo = ref("");
 let nombre = ref("");
 let fecha = ref("");
-
-const emit = defineEmits(["vaccineAdded"]);
 
 const vaccine = computed<Vaccine>(() => {
   return {
@@ -32,23 +30,20 @@ const cleanModal = () => {
 };
 
 async function addVacuna() {
-  let vacuna = await vacunas.postVacuna(vaccine.value, idAnimal.value);
+  try {
+    await vacunas.create({
+      vaccine: vaccine.value,
+      idAnimal: idAnimal.value,
+    });
 
-  if (!vacuna) {
+    showSuccessToast.value = true;
+    setTimeout(() => (showSuccessToast.value = false), 3100);
+
+    cleanModal();
+  } catch (error) {
     showFailToast.value = true;
-    setTimeout(() => {
-      showFailToast.value = false;
-    }, 3100);
-    return;
+    setTimeout(() => (showFailToast.value = false), 3100);
   }
-  emit("vaccineAdded");
-  showSuccessToast.value = true;
-  setTimeout(() => {
-    showSuccessToast.value = false;
-  }, 3100);
-
-  cleanModal();
-  return;
 }
 </script>
 

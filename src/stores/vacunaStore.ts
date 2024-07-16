@@ -1,3 +1,5 @@
+import { apiClient } from "@/axios";
+import { QueryFunctionContext, useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
 import { defineStore } from "pinia";
 
 export interface Vaccine {
@@ -6,68 +8,70 @@ export interface Vaccine {
   examenPrevio?: string | undefined;
 }
 
-export const useVacunas = defineStore("vacunas", () => {
-  const API_BASE = "http://localhost:5130";
+export interface PostVacunaParams {
+  vaccine: Vaccine,
+  idAnimal: number,
+}
 
-  /**
-   * Create a new vaccine.
-   * @param idAnimal The id of the animal to create the vaccine for.
-   * @param vaccine The vaccine to create.
-   * @return The created vaccine.
-   */
-  async function postVacuna(
-    vaccine: Vaccine,
-    idAnimal: number,
-  ): Promise<Vaccine | null> {
-    if (!vaccine || typeof vaccine !== "object") {
-      console.error("Invalid argument: vaccine must be an object");
-      return null;
-    }
+/**
+ * Create a new vaccine.
+ * @param idAnimal The id of the animal to create the vaccine for.
+ * @param vaccine The vaccine to create.
+ * @return The created vaccine.
+ */
+async function postVacuna(
+  params: PostVacunaParams,
+): Promise<Vaccine | null> {
+  const vaccine = params.vaccine;
+  const idAnimal = params.idAnimal;
 
-    try {
-      const response = await fetch(
-        `${API_BASE}/api/animales/${idAnimal}/vacunaciones`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(vaccine),
-        },
-      );
-
-      if (!response.ok) {
-        console.error("Failed to create vaccine");
-        return null;
-      }
-
-      return await response.json();
-    } catch (error: any) {
-      console.error(error.message);
-      return null;
-    }
+  if (!vaccine || typeof vaccine !== "object") {
+    console.error("Invalid argument: vaccine must be an object");
+    return null;
   }
 
-  async function getVacunas(idAnimal: number): Promise<Vaccine[] | null> {
-    try {
-      const response = await fetch(
-        `${API_BASE}/api/animales/${idAnimal}/vacunaciones`,
-      );
-
-      if (!response.ok) {
-        console.error("Failed to get vaccines");
-        return null;
-      }
-
-      return await response.json();
-    } catch (error: any) {
-      console.error(error.message);
-      return null;
-    }
+  try {
+    const response = await apiClient.post<Vaccine>(
+      `/api/animales/${idAnimal}/vacunaciones`,
+      vaccine,
+    );
+    return response.data;
+  } catch (error: any) {
+    console.error(error.message);
+    return null;
   }
+}
+
+async function getVacunas({ queryKey }: QueryFunctionContext): Promise<Vaccine[] | null> {
+  try {
+    const response = await apiClient.get(`/api/animales/${queryKey[1]}/vacunaciones`);
+    return response.data;
+  } catch (error: any) {
+    console.error(error.message);
+    return null;
+  }
+}
+
+export const useVacunas = (idAnimal: number) => defineStore("vacunas", () => {
+  const queryClient = useQueryClient();
+
+  const { data } = useQuery({
+    queryKey: ["vacunas", idAnimal],
+    queryFn: getVacunas,
+  })
+
+  const { mutateAsync, error, isError, isSuccess } = useMutation({
+    mutationFn: postVacuna,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["vacunas", idAnimal] });
+    }
+  })
 
   return {
-    postVacuna,
-    getVacunas,
+    items: data,
+    create: mutateAsync,
+    creationError: error,
+    isCreationError: isError,
+    isCreationSuccess: isSuccess,
   };
-});
+})();

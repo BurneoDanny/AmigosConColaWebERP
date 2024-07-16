@@ -5,7 +5,7 @@ import DetailPetInfo from "@/components/pet_info/DetailPetInfo.vue";
 import AddButton from "@/components/AddButton.vue";
 import VacunaModal from "@/components/animal_details/VacunaModal.vue";
 import { Animal } from "@stores/animalStore.ts";
-import { useVacunas, Vaccine } from "@stores/vacunaStore.ts";
+import { useVacunas } from "@stores/vacunaStore.ts";
 import { useRoute } from "vue-router";
 import VacunaPhoto from "@/components/vacunas/VacunaPhoto.vue";
 import VacunaInfo from "@/components/vacunas/VacunaInfo.vue";
@@ -19,27 +19,16 @@ const route = useRoute();
 
 idAnimal.value = route.params.id;
 
-const vacunas = useVacunas();
-const aseos = useAseos(parseInt(route.params.id as string));
+const idAnimalInt = parseInt(route.params.id as string);
+const vacunas = useVacunas(idAnimalInt);
+const aseos = useAseos(idAnimalInt);
 
 const props = defineProps<{
   pet: Animal | null;
 }>();
 
-let vaccines = ref<Vaccine[]>([]);
-
-async function getAllVaccines() {
-  const data = await vacunas.getVacunas(idAnimal.value);
-
-  if (!data) {
-    return;
-  }
-  vaccines.value = data;
-}
-
 onMounted(() => {
   initFlowbite();
-  getAllVaccines();
 });
 </script>
 
@@ -135,10 +124,10 @@ onMounted(() => {
           data-modal-target="vacuna-modal"
           data-modal-toggle="vacuna-modal"
         />
-        <VacunaModal @vaccineAdded="getAllVaccines" />
+        <VacunaModal />
 
         <div class="max-h-96 overflow-y-auto">
-          <div v-for="vaccine in vaccines" class="flex mb-4">
+          <div v-for="vaccine in vacunas.items" class="flex mb-4">
             <VacunaPhoto class="mr-3" />
             <VacunaInfo
               :examenPrevio="vaccine?.examenPrevio"
