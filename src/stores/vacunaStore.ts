@@ -82,4 +82,4 @@ export const useVacunas = (idAnimal: number) => {
     isCreationError: isError,
     isCreationSuccess: isSuccess,
   });
-}
+};

@@ -6,7 +6,7 @@ import {
   useQueryClient,
 } from "@tanstack/vue-query";
 import { apiClient } from "@/axios";
-import { reactive } from "vue"
+import { reactive } from "vue";
 
 export interface Aseo {
   id: number;
@@ -65,4 +65,4 @@ export const useAseos = (idAnimal: number) => {
     isMutationError,
     mutationError,
   });
-}
+};
