@@ -51,8 +51,8 @@ export const useAseos = (idAnimal: number) => {
     isSuccess,
   } = useMutation({
     mutationFn: postAseos,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["aseos", idAnimal] });
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["aseos", idAnimal] });
     },
   });
 

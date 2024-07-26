@@ -1,5 +1,10 @@
 import { apiClient } from "@/axios";
-import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
+import {
+  keepPreviousData,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/vue-query";
 import { Ref, reactive } from "vue";
 
 export interface Animal {
@@ -38,7 +43,8 @@ async function getPaginated(
 ): Promise<GetResponse | null> {
   if (page < 0) return null;
 
-  let url = `/api/animals/?page=${page}&perPage=12`; ``
+  let url = `/api/animals/?page=${page}&perPage=12`;
+  ``;
 
   if (specie) url += `&species=${specie}`;
   if (name) url += `&name=${name}`;
@@ -67,8 +73,7 @@ async function createAnimal({
   animal,
   image,
 }: CreateAnimalParams): Promise<Animal | null> {
-  if (!animal || typeof animal !== "object")
-    return null;
+  if (!animal || typeof animal !== "object") return null;
 
   const formData = new FormData();
 
@@ -108,47 +113,55 @@ async function getAnimalById(id: number) {
 }
 
 export const useAnimal = (idAnimal: number) => {
-  const { data } = useQuery({
+  const { data, isFetching } = useQuery({
     queryKey: ["animals", idAnimal],
     queryFn: async () => await getAnimalById(idAnimal),
-  })
+  });
 
   return reactive({
-    data
+    data,
+    loading: isFetching,
   });
-}
+};
 
-export const useAnimals = (params: {
-  page: Ref<number>,
-  specie: Ref<string>,
-  name: Ref<string>,
-} | null = null) => {
+export const useAnimals = (
+  params: {
+    page: Ref<number>;
+    specie: Ref<string>;
+    name: Ref<string>;
+  } | null = null,
+) => {
   const queryClient = useQueryClient();
 
   const emptyData = { data: [], nextPage: 0, totalItems: 0, totalPages: 0 };
 
   const { data, refetch } = useQuery({
     queryKey: ["animals"],
-    queryFn: async () => params !== null
-      ? await getPaginated(params.page.value, params.specie.value, params.name.value)
-      : emptyData,
+    queryFn: async () =>
+      params !== null
+        ? await getPaginated(
+            params.page.value,
+            params.specie.value,
+            params.name.value,
+          )
+        : emptyData,
     placeholderData: keepPreviousData,
     initialData: emptyData,
-  })
+  });
 
   const { mutateAsync: create } = useMutation({
     mutationKey: ["animals"],
     mutationFn: createAnimal,
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: ["animals"]
+        queryKey: ["animals"],
       });
-    }
-  })
+    },
+  });
 
   return reactive({
     data,
     refetch,
     create,
-  })
-}
+  });
+};

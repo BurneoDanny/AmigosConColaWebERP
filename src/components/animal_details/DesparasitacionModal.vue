@@ -1,8 +1,5 @@
 <script lang="ts" setup>
-import {
-  Deworming,
-  useDesparasitaciones,
-} from "@stores/desparasitacionStore.ts";
+import { Deworming } from "@stores/desparasitacionStore.ts";
 import { computed, ref } from "vue";
 import { useRoute } from "vue-router";
 
@@ -12,7 +9,7 @@ const showSuccessToast = ref(false);
 const showFailToast = ref(false);
 idAnimal.value = route.params.id;
 
-const desparasitaciones = useDesparasitaciones(parseInt(idAnimal.value));
+const props = defineProps(["onSubmit"]);
 
 let tipo = ref("");
 let fecha = ref("");
@@ -40,7 +37,7 @@ const cleanModal = () => {
 
 async function addDeworming() {
   try {
-    await desparasitaciones.create({
+    await props.onSubmit({
       deworming: deworming.value,
       idAnimal: idAnimal.value,
     });

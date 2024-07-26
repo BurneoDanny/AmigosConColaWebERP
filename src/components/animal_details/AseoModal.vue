@@ -1,18 +1,17 @@
 <script lang="ts" setup>
-import { useAseos } from "@/stores/aseoStore";
 import { ref } from "vue";
 import { useRoute } from "vue-router";
 
+const props = defineProps(["onSubmit"]);
+
 const route = useRoute();
 const idAnimal = parseInt(route.params.id as string);
-
-const aseos = useAseos(idAnimal);
 
 const fecha = ref("");
 const tipo_aseo = ref("");
 
 const postAseo = async () => {
-  aseos.create({
+  props.onSubmit({
     idAnimal,
     fecha: fecha.value,
     tipo: tipo_aseo.value,
