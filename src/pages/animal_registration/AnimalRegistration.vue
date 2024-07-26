@@ -53,9 +53,7 @@ const step = ref(0);
 const steps = [StepOne, StepTwo, StepThree];
 
 const animales = useAnimals();
-const currentSchema = computed(() => {
-  return animalRegistrationSchemas[step.value];
-});
+const currentSchema = computed(() => animalRegistrationSchemas[step.value]);
 
 const showSuccessToast = ref(false);
 const showFailToast = ref(false);
@@ -69,24 +67,26 @@ const previousStep = () => {
 
 const nextStep = async (values: any) => {
   if (step.value === 2) {
-    const res = await animales.createAnimal(values, values.imagen?.image);
-    if (!res) {
+    try {
+      await animales.create({
+        animal: values,
+        image: values.imagen?.image,
+      });
+
+      showSuccessToast.value = true;
+      isSuccess.value = true;
+
+      setTimeout(() => {
+        showSuccessToast.value = false;
+        router.push("/home");
+      }, 1000);
+    } catch {
       showFailToast.value = true;
       isSuccess.value = false;
-      setTimeout(() => {
-        showFailToast.value = false;
-      }, 3000);
-      return;
+      setTimeout(() => (showFailToast.value = false), 3000);
     }
-    showSuccessToast.value = true;
-    isSuccess.value = true;
-    setTimeout(() => {
-      showSuccessToast.value = false;
-      router.push("/home");
-    }, 2000);
-
-    return;
   }
+
   if (step.value < steps.length - 1) {
     step.value++;
   }
