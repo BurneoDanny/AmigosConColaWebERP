@@ -1,16 +1,22 @@
 <script lang="ts" setup>
 import { Animal } from "@stores/animalStore.ts";
+import { ref } from "vue";
+import ChangeInfoModal  from "./ChangeInfoModal.vue";
 
 const { pet } = defineProps<{
   pet: Animal | null;
 }>();
+
+
 </script>
 
 <template>
   <div
     class="w-[18.5rem] lg:w-[22rem] sm:w-[20rem] xl:w-[16.8rem] border p-5 sm:p-6 shadow-lg rounded-[1.5rem]"
   >
-    <button class="flex justify-end w-full pr-1 mb-4">
+    <button class="flex justify-end w-full pr-1 mb-4" 
+          data-modal-target="info-modal"
+          data-modal-toggle="info-modal">
       <span class="icon-[fluent--edit-16-regular]"></span>
     </button>
     <div class="mb-6 flex justify-center">
@@ -71,6 +77,7 @@ const { pet } = defineProps<{
         </div>
       </div>
     </div>
+  <ChangeInfoModal :pet="pet"/>
   </div>
 </template>
 

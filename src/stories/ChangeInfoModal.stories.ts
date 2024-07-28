@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/vue3";
 
-import ChangeInfoModal from "@/pages/ChangeInfoModal.vue";
+import ChangeInfoModal from "@/components/pet_info/ChangeInfoModal.vue";
 
 const meta: Meta<typeof ChangeInfoModal> = {
   component: ChangeInfoModal,
