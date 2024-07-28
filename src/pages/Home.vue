@@ -7,17 +7,13 @@ import AnimalCard from "@/components/home_page/AnimalCard.vue";
 import catIcon from "@/assets/home_page/cat.svg";
 import bellIcon from "@/assets/home_page/bell.svg";
 import dogIcon from "@/assets/home_page/dog.svg";
-import { onMounted, ref, watch } from "vue";
-import { Animal, GetResponse, useAnimals } from "@stores/animalStore.ts";
+import { ref, watch, computed, ComputedRef } from "vue";
+import { Animal, useAnimals } from "@stores/animalStore.ts";
 import { AnimalSpecies } from "@/enums/animal_species.ts";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
-const animalsToShow = 12;
-const squareNumber = ref(3);
-const api = useAnimals();
 
-const animalesFiltered = ref<Animal[]>([]);
 const search = ref("");
 const debounceTimer = ref<number | undefined>(undefined);
 const isDogSelect = ref(false);
@@ -25,30 +21,23 @@ const isCatSelect = ref(false);
 const currentPage = ref(1);
 const currentSpecie = ref("");
 
-watch(search, () => {
-  clearTimeout(debounceTimer.value);
-  debounceTimer.value = window.setTimeout(async () => {
-    const response: GetResponse | null = await api.getPaginated(
-      currentPage.value,
-      animalsToShow,
-      currentSpecie.value,
-      search.value,
-    );
-    if (response) {
-      animalesFiltered.value = response.data;
-    }
-  }, 300);
+const animals = useAnimals({
+  page: currentPage,
+  specie: currentSpecie,
+  name: search,
 });
 
-onMounted(async () => {
-  const response: GetResponse | null = await api.getPaginated(
-    1,
-    animalsToShow,
-    currentSpecie.value,
-  );
-  if (!response) return;
-  animalesFiltered.value = response?.data;
-  squareNumber.value = response.totalPages;
+const animalesFiltered: ComputedRef<Animal[]> = computed(
+  () => animals.data?.data ?? [],
+);
+
+const squareNumber: ComputedRef<number> = computed(
+  () => animals.data?.totalPages ?? 3,
+);
+
+watch(search, () => {
+  clearTimeout(debounceTimer.value);
+  debounceTimer.value = window.setTimeout(animals.refetch, 300);
 });
 
 const selectDogs = async () => {
@@ -56,15 +45,13 @@ const selectDogs = async () => {
     isDogSelect.value = false;
     currentSpecie.value = "";
     currentPage.value = 1;
-    const response = await api.getPaginated(currentPage.value, animalsToShow);
-    if (!response) return;
-    animalesFiltered.value = response.data;
-    squareNumber.value = response.totalPages;
+    await animals.refetch();
     return;
   }
+
   currentPage.value = 1;
   currentSpecie.value = AnimalSpecies.DOG;
-  await handleChangePage(currentPage.value);
+  await animals.refetch();
 
   isDogSelect.value = true;
   isCatSelect.value = false;
@@ -75,15 +62,13 @@ const selectCats = async () => {
     isCatSelect.value = false;
     currentSpecie.value = "";
     currentPage.value = 1;
-    const response = await api.getPaginated(currentPage.value, animalsToShow);
-    if (!response) return;
-    animalesFiltered.value = response.data;
-    squareNumber.value = response.totalPages;
+    await animals.refetch();
     return;
   }
+
   currentPage.value = 1;
   currentSpecie.value = AnimalSpecies.CAT;
-  await handleChangePage(currentPage.value);
+  await animals.refetch();
 
   isCatSelect.value = true;
   isDogSelect.value = false;
@@ -95,45 +80,16 @@ const onRegisterAnimalClicked = () => {
   });
 };
 
-const handleChangePage = async (page: number) => {
-  const response = await api.getPaginated(
-    page,
-    animalsToShow,
-    currentSpecie.value,
-  );
-  if (!response) return;
-  animalesFiltered.value = response.data;
-  squareNumber.value = response.totalPages;
-  currentPage.value = page;
-};
-
 const handleNextPage = async () => {
-  if (currentPage.value === squareNumber.value) {
-    return;
-  }
+  if (currentPage.value === squareNumber.value) return;
   currentPage.value += 1;
-  const response = await api.getPaginated(
-    currentPage.value,
-    animalsToShow,
-    currentSpecie.value,
-  );
-  if (!response) return;
-  animalesFiltered.value = response.data;
+  await animals.refetch();
 };
 
 const handlePreviousPage = async () => {
-  if (currentPage.value === 1) {
-    return;
-  }
+  if (currentPage.value === 1) return;
   currentPage.value -= 1;
-  const response = await api.getPaginated(
-    currentPage.value,
-    animalsToShow,
-    currentSpecie.value,
-  );
-  if (!response) return;
-  animalesFiltered.value = response.data;
-  squareNumber.value = response.totalPages;
+  await animals.refetch();
 };
 </script>
 
@@ -187,7 +143,7 @@ const handlePreviousPage = async () => {
         :currentPage="currentPage"
         :pages="squareNumber"
         @nextPage="handleNextPage"
-        @pageChange="handleChangePage"
+        @pageChange="async () => await animals.refetch()"
         @previousPage="handlePreviousPage"
       />
     </div>

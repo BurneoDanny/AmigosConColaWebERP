@@ -3,8 +3,16 @@ import { ref } from "vue";
 import { Field, useField } from "vee-validate";
 import { AnimalSpecies } from "@/enums/animal_species.ts";
 import { AnimalGender } from "@/enums/animal_gender.ts";
+import FormInput from "@/components/FormInput.vue";
+import FormSelect from "../FormSelect.vue";
 
 const props = defineProps(["formValues"]);
+
+const selectOptions = [
+  { value: "Dias", label: "Días" },
+  { value: "Meses", label: "Meses" },
+  { value: "Años", label: "Años" },
+];
 
 const perroIsSelect = ref<boolean>(false);
 const gatoIsSelect = ref<boolean>(false);
@@ -52,7 +60,7 @@ const changeEdad = (e: Event) => {
     let diffDays = diff / (1000 * 60 * 60 * 24);
     if (diffDays < 30) {
       diffDays = Math.floor(diffDays);
-      tipoEdad.handleChange("Días");
+      tipoEdad.handleChange("Dias");
     } else if (diffDays < 365) {
       diffDays = Math.floor(diffDays / 30);
       tipoEdad.handleChange("Meses");
@@ -75,16 +83,15 @@ const changeEdad = (e: Event) => {
         name="nombre"
       >
         <label
-          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white md:mb-0 md:w-24"
+          class="block mb-2 font-medium text-gray-900 dark:text-white md:mb-0 md:w-24"
           for="nombre"
           >Nombre<strong>*</strong></label
         >
 
         <div class="flex flex-col w-full">
-          <input
+          <FormInput
             id="nombre"
             autocomplete="off"
-            class="block w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary p-2.5"
             placeholder="Bruno"
             type="text"
             v-bind="field"
@@ -161,24 +168,13 @@ const changeEdad = (e: Event) => {
           name="tipo_edad"
         >
           <div class="flex flex-col w-full">
-            <select
+            <FormSelect
               :disabled="edadDisabled"
-              class="block w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               v-bind="field"
-            >
-              <option :selected="!value" disabled value="">
-                Tiempo en ...
-              </option>
-              <option :selected="value?.includes('Días')" value="Días">
-                Días
-              </option>
-              <option :selected="value?.includes('Meses')" value="Meses">
-                Meses
-              </option>
-              <option :selected="value?.includes('Años')" value="Años">
-                Años
-              </option>
-            </select>
+              :options="selectOptions"
+              :tipo_edad="value"
+              placeholder="Tiempo en ..."
+            />
             <span class="mt-2 text-sm text-red-600 dark:text-red-500">
               {{ errorMessage }}
             </span>
@@ -400,6 +396,19 @@ textarea {
 input:disabled {
   background-color: #f3f4f6;
   cursor: not-allowed;
+}
+
+input,
+textarea,
+select {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+label {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #4b5563;
 }
 
 select:disabled {

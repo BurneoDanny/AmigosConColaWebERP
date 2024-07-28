@@ -1,15 +1,14 @@
 <script lang="ts" setup>
-import { useVacunas, Vaccine } from "@stores/vacunaStore.ts";
+import { Vaccine } from "@stores/vacunaStore.ts";
 import { computed, ref } from "vue";
 import { useRoute } from "vue-router";
 
-const idAnimal = ref();
+const props = defineProps(["onSubmit"]);
+
 const route = useRoute();
 const showSuccessToast = ref(false);
 const showFailToast = ref(false);
-idAnimal.value = route.params.id;
-
-const vacunas = useVacunas(parseInt(idAnimal.value));
+const idAnimal = ref(route.params.id);
 
 let examen_previo = ref("");
 let nombre = ref("");
@@ -31,7 +30,7 @@ const cleanModal = () => {
 
 async function addVacuna() {
   try {
-    await vacunas.create({
+    await props.onSubmit({
       vaccine: vaccine.value,
       idAnimal: idAnimal.value,
     });
@@ -174,5 +173,3 @@ async function addVacuna() {
     </div>
   </div>
 </template>
-
-<style scoped></style>
