@@ -112,9 +112,7 @@ async function getAnimalById(id: number): Promise<Animal | null> {
 }
 
 async function deleteAnimal(id: number): Promise<void> {
-  // TODO: Change method to DELETE
-  console.log(id);
-  await apiClient.post(`/api/animals/${id}`);
+  await apiClient.delete(`/api/animals/${id}`);
 }
 
 export const useAnimal = (idAnimal: number) => {
