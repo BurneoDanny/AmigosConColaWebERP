@@ -2,7 +2,7 @@
 import AddButton from "@/components/home_page/AddButton.vue";
 import SearchInput from "@/components/home_page/SearchInput.vue";
 import FilterButton from "@/components/home_page/FilterButton.vue";
-import InventoryTable from "@/components/home_page/InventoryTable.vue";
+import InventoryTable from "@/components/inventory_page/InventoryTable.vue";
 import filterIcon from "@/assets/home_page/filter.svg";
 import pillIcon from "@assets/home_page/pill.svg";
 import { ref, watch, computed, ComputedRef } from "vue";
