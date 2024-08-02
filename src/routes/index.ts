@@ -28,7 +28,7 @@ const routes = [
     path: "/crear-producto",
     name: "crear-producto",
     component: () =>
-      import("@pages/product_registration/ProductRegistration.vue"),
+      import("@/pages/product_registration/ProductRegistration.vue"),
   },
 ];
 
