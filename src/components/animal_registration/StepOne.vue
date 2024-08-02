@@ -4,7 +4,7 @@ import { Field, useField } from "vee-validate";
 import { AnimalSpecies } from "@/enums/animal_species.ts";
 import { AnimalGender } from "@/enums/animal_gender.ts";
 import FormInput from "@/components/FormInput.vue";
-import FormSelect from "../FormSelect.vue";
+import FormSelect from "@/components/FormSelect.vue";
 
 const props = defineProps(["formValues"]);
 

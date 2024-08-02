@@ -6,9 +6,16 @@ import InventoryTable from "@/components/home_page/InventoryTable.vue";
 import filterIcon from "@/assets/home_page/filter.svg";
 import pillIcon from "@assets/home_page/pill.svg";
 import { ref, watch, computed, ComputedRef } from "vue";
-import { Animal, useAnimals } from "@stores/animalStore.ts";
-import { AnimalSpecies } from "@/enums/animal_species.ts";
 import { useRouter } from "vue-router";
+
+const router = useRouter();
+const search = ref("");
+
+const onRegisterProductClicked = () => {
+  router.push({
+    name: "crear-producto",
+  });
+};
 </script>
 
 <template>
@@ -18,7 +25,7 @@ import { useRouter } from "vue-router";
         class="flex justify-start lg:justify-end items-center gap-3 lg:mx-4 mt-5"
       >
         <SearchInput v-model="search" />
-        <AddButton @click="onRegisterAnimalClicked">
+        <AddButton @click="onRegisterProductClicked">
           <span class="hidden md:flex">Agregar al inventario</span>
         </AddButton>
       </div>

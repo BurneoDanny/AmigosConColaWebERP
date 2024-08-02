@@ -24,6 +24,12 @@ const routes = [
     component: () =>
       import("@pages/animal_registration/AnimalRegistration.vue"),
   },
+  {
+    path: "/crear-producto",
+    name: "crear-producto",
+    component: () =>
+      import("@pages/product_registration/ProductRegistration.vue"),
+  },
 ];
 
 const router = createRouter({
