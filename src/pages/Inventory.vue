@@ -47,7 +47,9 @@ const onRegisterProductClicked = () => {
         />
       </div>
     </section>
-    <section class="flex-1 gap-x-5 flex md:gap-x-5 lg:gap-x-11 gap-y-9 flex-wrap mt-2 mb-2">
+    <section
+      class="flex-1 gap-x-5 flex md:gap-x-5 lg:gap-x-11 gap-y-9 flex-wrap mt-2 mb-2"
+    >
       <InventoryTable />
     </section>
   </div>

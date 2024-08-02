@@ -28,11 +28,11 @@ const animals = useAnimals({
 });
 
 const animalesFiltered: ComputedRef<Animal[]> = computed(
-  () => animals.data?.data ?? []
+  () => animals.data?.data ?? [],
 );
 
 const squareNumber: ComputedRef<number> = computed(
-  () => animals.data?.totalPages ?? 3
+  () => animals.data?.totalPages ?? 3,
 );
 
 watch(search, () => {

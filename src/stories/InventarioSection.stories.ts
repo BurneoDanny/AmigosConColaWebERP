@@ -9,8 +9,8 @@ export default meta;
 type Story = StoryObj<typeof Inventory>;
 
 export const Primary: Story = {
-    render: () => ({
-        components: { Inventory },
-        template: "<Inventory />",
-    }),
+  render: () => ({
+    components: { Inventory },
+    template: "<Inventory />",
+  }),
 };
