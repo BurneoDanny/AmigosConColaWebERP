@@ -26,13 +26,13 @@ const schema = yup.object({
     .positive("El volumen debe ser un número positivo"),
   caja: yup
     .number()
-    .typeError("El volumen debe ser un número válido")
+    .typeError("La caja debe ser un número válido")
     .required("Por favor, ingrese la cantidad de cajas.")
     .positive("La cantidad de cajas debe ser un número positivo")
     .integer("La cantidad de cajas debe ser número entero"),
   cantidad: yup
     .number()
-    .typeError("El volumen debe ser un número válido")
+    .typeError("La cantidad debe ser un número válido")
     .required("Por favor, ingrese la cantidad.")
     .positive("La cantidad debe ser un número positivo")
     .integer("La cantidad debe ser número entero"),
