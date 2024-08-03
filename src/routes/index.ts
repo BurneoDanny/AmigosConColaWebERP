@@ -25,10 +25,10 @@ const routes = [
       import("@pages/animal_registration/AnimalRegistration.vue"),
   },
   {
-    path: "/crear-producto",
-    name: "crear-producto",
+    path: "/crear-item",
+    name: "crear-item",
     component: () =>
-      import("@pages/product_registration/ProductRegistration.vue"),
+      import("@/pages/item_registration/CreateInventoryItem.vue"),
   },
 ];
 
