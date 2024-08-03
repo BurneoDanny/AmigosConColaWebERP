@@ -52,7 +52,6 @@ const schema = yup.object({
   clasificacion: yup.string().required("Obligatorio"),
   codigo: yup.string(),
 });
-
 const inventoryRegistrationSchema = toTypedSchema(schema);
 
 const selectOptionsForOrigen = [
