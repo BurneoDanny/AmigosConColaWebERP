@@ -1,31 +1,25 @@
 <script lang="ts" setup>
-import { defineProps } from "vue";
+interface Props {
+  pages: number;
+  currentPage: number;
+}
 
-const props = defineProps({
-  pages: {
-    type: Number,
-    default: 1,
-  },
-  currentPage: {
-    type: Number,
-    default: 1,
-  },
-});
+defineProps<Props>();
 
-const emit = defineEmits(["pageChange", "nextPage", "previousPage"]);
-
-const handleClick = (pagina: number) => {
-  emit("pageChange", pagina);
-};
+defineEmits<{
+  (e: "selectPage", page: number): void;
+}>();
 </script>
 
 <template>
   <nav aria-label="Page navigation example">
     <ul class="flex items-center -space-x-px h-8 text-sm">
       <li>
-        <button
+        <span
           class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-          @click="$emit('previousPage')"
+          @click="
+            $emit('selectPage', currentPage > 0 ? currentPage - 1 : currentPage)
+          "
         >
           <span class="sr-only">Previous</span>
           <svg
@@ -43,27 +37,33 @@ const handleClick = (pagina: number) => {
               stroke-width="2"
             />
           </svg>
-        </button>
+        </span>
       </li>
-      <!-- v-for 4 anchors -->
-      <li v-for="pagina in props.pages" :key="pagina">
-        <button
-          :class="{
-            'flex items-center justify-center px-3 h-8 bg-primary/70 leading-tight text-base  border border-gray-300  hover:text-gray-700':
-              props.currentPage === pagina,
-            'flex items-center justify-center px-3 h-8 bg-white leading-tight text-base  border border-gray-300 hover:bg-gray-100 hover:text-gray-700':
-              props.currentPage !== pagina,
-          }"
-          @click="handleClick(pagina)"
+      <li v-for="i in pages">
+        <span
+          v-if="i === currentPage"
+          class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 bg-primary/20"
+          @click="$emit('selectPage', i)"
         >
-          {{ pagina }}
-        </button>
+          {{ i }}
+        </span>
+        <span
+          v-else
+          class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700"
+          @click="$emit('selectPage', i)"
+        >
+          {{ i }}
+        </span>
       </li>
-
       <li>
-        <button
-          class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700"
-          @click="$emit('nextPage')"
+        <span
+          class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+          @click="
+            $emit(
+              'selectPage',
+              currentPage < pages ? currentPage + 1 : currentPage,
+            )
+          "
         >
           <span class="sr-only">Next</span>
           <svg
@@ -81,7 +81,7 @@ const handleClick = (pagina: number) => {
               stroke-width="2"
             />
           </svg>
-        </button>
+        </span>
       </li>
     </ul>
   </nav>
