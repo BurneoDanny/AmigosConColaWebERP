@@ -4,7 +4,7 @@ import AmigosConColaLogo from "@assets/images/amigos-con-cola-logo.png";
 
 <template>
   <nav
-    class="w-full sticky bg-white border-[0.005rem] p-2.5 drop-shadow flex justify-between items-center"
+    class="w-full sticky bg-white border-[0.005rem] p-2.5 drop-shadow flex justify-between items-center z-10"
   >
     <div class="ml-2">
       <RouterLink class="flex items-center" to="/home">

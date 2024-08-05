@@ -9,9 +9,11 @@ import { ref } from "vue";
 import ACFormMultiLineInput from "@/components/common/ACFormMultiLineInput.vue";
 import { useAnimals } from "@stores/animalStore.ts";
 import { useRouter } from "vue-router";
+import { useToast } from "@stores/toastStore.ts";
 
 const animals = useAnimals();
 const router = useRouter();
+const { toast } = useToast();
 
 const imageFileInput = ref<typeof ACFormFileInput | null>(null);
 const previewImageUrl = ref<string | null>(null);
@@ -28,10 +30,15 @@ const onSubmit = async (values) => {
   try {
     await animals.create(values);
     await router.push({ name: "home" });
-    // TODO: Show success toast
+    toast({
+      message: "Animal registrado con éxito",
+    });
   } catch (e) {
-    // TODO: Show error toast
     console.error(e);
+    toast({
+      message: "Hubo un error al registrar el animal",
+      severity: "error",
+    });
   }
 };
 </script>
