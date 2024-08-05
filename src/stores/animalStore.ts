@@ -56,45 +56,33 @@ async function getPaginated(
   }
 }
 
-interface CreateAnimalParams {
-  animal: Animal;
-  image: File | null;
+interface NewAnimal {
+  nombre: string;
+  edad: number;
+  imagen: File;
+  genero: "Male" | "Female";
+  especie: "Cat" | "Dog";
+  ubicacion: string;
+  peso: number;
+  historia?: string;
+  codigo?: string;
 }
 
-/**
- * Create a new animal.
- * @param animal The animal to create.
- * @param image Image file to upload
- * @return The created animal.
- */
-// En src/stores/animalStore.ts
-async function createAnimal({
-  animal,
-  image,
-}: CreateAnimalParams): Promise<Animal | null> {
-  if (!animal || typeof animal !== "object") return null;
-
+async function createAnimal(newAnimal: NewAnimal): Promise<Animal | null> {
   const formData = new FormData();
 
-  formData.set("nombre", animal.nombre);
-  formData.set("genero", animal.genero);
-  formData.set("especie", animal.especie);
-  formData.set("edad", animal.edad.toString());
-  formData.set("codigo", animal.codigo);
-  formData.set("ubicacion", animal.ubicacion);
-  formData.set("historia", animal.historia);
-  formData.set("peso", animal.peso.toString());
+  formData.set("nombre", newAnimal.nombre);
+  formData.set("genero", newAnimal.genero);
+  formData.set("especie", newAnimal.especie);
+  formData.set("edad", newAnimal.edad.toString());
+  formData.set("ubicacion", newAnimal.ubicacion);
+  formData.set("codigo", newAnimal.codigo ?? "");
+  formData.set("historia", newAnimal.historia ?? "");
+  formData.set("peso", newAnimal.peso.toString());
+  formData.set("imagen", newAnimal.imagen);
 
-  if (image !== null) {
-    formData.set("imagen", image);
-  }
-
-  try {
-    const response = await apiClient.post(`/api/animals`, formData);
-    return await response.data;
-  } catch (error: any) {
-    return null;
-  }
+  const response = await apiClient.post(`/api/animals`, formData);
+  return await response.data;
 }
 
 /**
