@@ -8,16 +8,14 @@ import Toast from "@/components/toast/Toast.vue";
 import LoadingSpinnerModal from "@/components/common/LoadingSpinnerModal.vue";
 
 const route = useRoute();
-const shouldShowSideBar = computed(
-  () => route.path !== "/" && route.path !== "/login",
-);
+
 const routerViewClasses = computed(() => ({
   "sm:ml-[5rem]": shouldShowSideBar.value,
 }));
 
-const shouldShowNavbar = computed(() => {
-  return route.path !== "/" && route.path !== "/login";
-});
+const shouldShowSideBar = computed(() => !["/", "/login"].includes(route.path));
+const shouldShowNavbar = computed(() => !["/", "/login"].includes(route.path));
+const isHomePage = computed(() => route.path === "/home");
 </script>
 
 <template>
@@ -27,7 +25,7 @@ const shouldShowNavbar = computed(() => {
     <SideBar v-if="shouldShowSideBar" />
     <div :class="routerViewClasses">
       <NavBar v-if="shouldShowNavbar">
-        <SearchInput />
+        <SearchInput v-if="isHomePage" />
       </NavBar>
       <RouterView />
     </div>

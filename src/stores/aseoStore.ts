@@ -42,6 +42,7 @@ export const useAseos = (idAnimal: number) => {
   const { isError, data, error } = useQuery({
     queryKey: ["aseos", idAnimal],
     queryFn: fetchAseos,
+    initialData: [],
   });
 
   const {

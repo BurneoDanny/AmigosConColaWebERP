@@ -22,6 +22,10 @@ const routes = [
     name: "crear-animal",
     component: () => import("@pages/NewAnimalPage.vue"),
   },
+  {
+    path: "/animales/:id/aseos",
+    component: () => import("@pages/AseosPage.vue"),
+  },
 ];
 
 const router = createRouter({
