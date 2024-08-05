@@ -10,10 +10,12 @@ import ACFormMultiLineInput from "@/components/common/ACFormMultiLineInput.vue";
 import { useAnimals } from "@stores/animalStore.ts";
 import { useRouter } from "vue-router";
 import { useToast } from "@stores/toastStore.ts";
+import { useSpinner } from "@stores/loadingSpinnerModalStore.ts";
 
 const animals = useAnimals();
 const router = useRouter();
 const { toast } = useToast();
+const spinner = useSpinner();
 
 const imageFileInput = ref<typeof ACFormFileInput | null>(null);
 const previewImageUrl = ref<string | null>(null);
@@ -25,10 +27,9 @@ const onImageFileChanged = (file: File | null) => {
 };
 
 const onSubmit = async (values) => {
-  // TODO: show loading spinner
   // TODO: put types in separate director`
   try {
-    await animals.create(values);
+    await spinner.wait(async () => await animals.create(values));
     await router.push({ name: "home" });
     toast({
       message: "Animal registrado con éxito",

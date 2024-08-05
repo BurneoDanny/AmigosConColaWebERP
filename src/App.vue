@@ -5,6 +5,7 @@ import { computed } from "vue";
 import NavBar from "@/components/common/NavBar.vue";
 import SearchInput from "@/components/common/GlobalSearch.vue";
 import Toast from "@/components/toast/Toast.vue";
+import LoadingSpinnerModal from "@/components/common/LoadingSpinnerModal.vue";
 
 const route = useRoute();
 const shouldShowSideBar = computed(
@@ -22,6 +23,7 @@ const shouldShowNavbar = computed(() => {
 <template>
   <div>
     <Toast />
+    <LoadingSpinnerModal />
     <SideBar v-if="shouldShowSideBar" />
     <div :class="routerViewClasses">
       <NavBar v-if="shouldShowNavbar">

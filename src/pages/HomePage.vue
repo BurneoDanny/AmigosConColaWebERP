@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import AnimalCard from "@/components/animals/AnimalCard.vue";
-import { ref } from "vue";
+import { ref, watchEffect } from "vue";
 import { useAnimals } from "@stores/animalStore.ts";
 import { useGlobalSearch } from "@stores/useGlobalSearch.ts";
 import { storeToRefs } from "pinia";
@@ -8,6 +8,7 @@ import ACButtonPrimary from "@/components/common/buttons/ACButtonPrimary.vue";
 import { useRouter } from "vue-router";
 import ACSelectRadio from "@/components/common/ACSelectRadio.vue";
 import PaginationControls from "@/components/common/PaginationControls.vue";
+import { useSpinner } from "@stores/loadingSpinnerModalStore.ts";
 
 const currentPage = ref(1);
 const currentSpecies = ref("");
@@ -21,6 +22,15 @@ const animals = useAnimals({
   page: currentPage,
   specie: currentSpecies,
   name: search,
+});
+
+const spinner = useSpinner();
+watchEffect(() => {
+  if (animals.loading) {
+    spinner.show();
+  } else {
+    spinner.close();
+  }
 });
 
 const speciesFilters = [

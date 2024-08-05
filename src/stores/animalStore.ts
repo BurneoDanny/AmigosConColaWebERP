@@ -146,7 +146,7 @@ export const useAnimals = (
 
   const emptyData = { data: [], nextPage: 0, totalItems: 0, totalPages: 0 };
 
-  const { data, refetch } = useQuery({
+  const { data, refetch, isFetching } = useQuery({
     queryKey: ["animals"],
     queryFn: async () =>
       params !== null
@@ -178,6 +178,7 @@ export const useAnimals = (
 
   return reactive({
     data,
+    loading: isFetching,
     refetch,
     create,
   });
