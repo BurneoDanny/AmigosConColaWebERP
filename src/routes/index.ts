@@ -50,12 +50,12 @@ const routes = [
   {
     path: '/animales/:id/vacunas',
     name: 'vacunas',
-    component: () => null// import("@pages/VacunasPage"),
+    component: () => import("@pages/VacunasPage.vue"),
   },
   {
     path: '/animales/:id/vacunas/nuevo',
     name: 'new-vacuna',
-    component: () => null// import("@pages/NewVacunaPage"),
+    component: () => import("@pages/NewVacunaPage.vue"),
   }
 ];
 

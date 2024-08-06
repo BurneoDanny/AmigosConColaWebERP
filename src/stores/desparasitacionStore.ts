@@ -7,7 +7,7 @@ import {
 } from "@tanstack/vue-query";
 import { reactive } from "vue";
 
-export interface Deworming {
+export interface Desparasitacion {
   id: number;
   tipo: string;
   fecha: string;
@@ -16,7 +16,7 @@ export interface Deworming {
   formato: string;
 }
 
-export interface NewDeworming {
+export interface NuevaDesparasitacion {
   tipo: string;
   fecha: string;
   producto: string;
@@ -26,15 +26,15 @@ export interface NewDeworming {
 
 async function postDesparasitaciones(
   id: number,
-  payload: NewDeworming,
-): Promise<Deworming> {
+  payload: NuevaDesparasitacion,
+): Promise<Desparasitacion> {
   const res = await apiClient.post(`/api/animals/${id}/desparasitaciones`, payload);
   return res.data
 }
 
 export async function getDesparasitaciones({
   queryKey,
-}: QueryFunctionContext): Promise<Deworming[]> {
+}: QueryFunctionContext): Promise<Desparasitacion[]> {
   try {
     const response = await apiClient.get(
       `/api/animals/${queryKey[1]}/desparasitaciones`,
@@ -55,7 +55,7 @@ export const useDesparasitaciones = (idAnimal: number) => {
   });
 
   const { mutateAsync, error, isError, isSuccess } = useMutation({
-    mutationFn: async (payload: NewDeworming) => postDesparasitaciones(idAnimal, payload),
+    mutationFn: async (payload: NuevaDesparasitacion) => postDesparasitaciones(idAnimal, payload),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["desparasitaciones", idAnimal],

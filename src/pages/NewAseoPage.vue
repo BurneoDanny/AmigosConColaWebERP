@@ -22,11 +22,8 @@ const spinner = useSpinner();
 
 const onSubmit: SubmissionHandler<Schema> = async (values) => {
   try {
-    const data = { idAnimal: id, ...values };
-    await spinner.wait(async () => await aseos.create(data));
-    toast({
-      message: "El aseo fue creado con éxito",
-    });
+    await spinner.wait(async () => await aseos.create(values));
+    toast({ message: "El aseo fue creado con éxito" });
     router.back();
   } catch {
     toast({

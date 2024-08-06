@@ -160,7 +160,7 @@ const onSubmit: SubmissionHandler<Schema> = async (values) => {
           @click="onCancelEdit"
           class="flex items-center gap-1 w-fit mt-4"
         >
-          Cancel
+          Cancelar
         </ACButtonCancel>
       </div>
     </Form>
