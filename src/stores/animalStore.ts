@@ -126,12 +126,25 @@ export const useAnimal = (idAnimal: number) => {
     },
   });
 
+  const { mutateAsync: update } = useMutation({
+    mutationKey: ["animals", idAnimal],
+    mutationFn: async function(payload: any) {
+      await apiClient.patch(`/api/animals/${idAnimal}`, payload)
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ["animals", idAnimal]
+      })
+    }
+  })
+
   return reactive({
     data,
     remove,
     isSuccess,
     isError,
     loading: isFetching,
+    update,
   });
 };
 
@@ -151,10 +164,10 @@ export const useAnimals = (
     queryFn: async () =>
       params !== null
         ? await getPaginated(
-            params.page.value,
-            params.specie.value,
-            params.name.value,
-          )
+          params.page.value,
+          params.specie.value,
+          params.name.value,
+        )
         : emptyData,
     placeholderData: keepPreviousData,
     initialData: emptyData,

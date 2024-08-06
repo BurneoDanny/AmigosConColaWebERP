@@ -9,6 +9,8 @@ import ACButtonCancel from "@/components/common/buttons/ACButtonCancel.vue";
 import ACFormMultiLineInput from "@/components/common/ACFormMultiLineInput.vue";
 import { Form, SubmissionHandler } from "vee-validate";
 import { ref, watch } from "vue";
+import { useToast } from "@/stores/toastStore";
+import ACFormToggle from "@/components/common/ACFormToggle.vue";
 
 const route = useRoute();
 const id = parseInt(route.params.id as string);
@@ -18,6 +20,8 @@ const animal = useAnimal(id);
 
 const editing = ref(false);
 
+const { toast } = useToast();
+
 const resetForm = () => {
   if (animal.data !== null && form.value !== null) {
     form.value.resetForm({
@@ -25,6 +29,7 @@ const resetForm = () => {
         ...animal.data,
         genero: animal.data.genero === "Female" ? "Femenino" : "Masculino",
         especie: animal.data.especie === "Cat" ? "Gato" : "Perro",
+        adoptado: animal.data.adoptado ? "true" : "false",
       },
     });
   }
@@ -37,9 +42,17 @@ const onCancelEdit = () => {
   editing.value = false;
 };
 
-const onSubmit: SubmissionHandler<Schema> = (values) => {
-  // TODO: Enviar datos a la api
-  console.log(values);
+const onSubmit: SubmissionHandler<Schema> = async (values) => {
+  try {
+    await animal.update(values as any);
+    toast({ message: "Animal actualizado con éxito" })
+    editing.value = false
+  } catch {
+    toast({
+      message: "Hubo un error al actualizar el animal",
+      severity: "error",
+    })
+  }
 };
 </script>
 
@@ -47,108 +60,56 @@ const onSubmit: SubmissionHandler<Schema> = (values) => {
   <div class="px-8 py-4">
     <div class="flex flex-col gap-4 justify-center mb-4">
       <div class="flex gap-4">
-        <img
-          :src="animal.data?.imagen"
-          alt="imagen"
-          width="40"
-          class="rounded-full aspect-square cover"
-        />
+        <img :src="animal.data?.imagen" alt="imagen" width="40" class="rounded-full aspect-square cover" />
         <h1 class="text-2xl">
           {{ animal.data?.nombre }}
         </h1>
       </div>
       <div class="flex items-center h-full">
-        <ACButtonPrimary
-          @click="editing = true"
-          class="flex items-center gap-2"
-        >
+        <ACButtonPrimary @click="editing = true" class="flex items-center gap-2">
           <span class="icon-[uil--edit]"></span>
           Edit
         </ACButtonPrimary>
       </div>
     </div>
-    <Form
-      ref="form"
-      class="grid grid-cols-1 md:grid-cols-2 gap-x-2 gap-y-2 md:gap-x-8 md:gap-y-4"
-      :validation-schema="schema"
-      @submit="onSubmit"
-    >
-      <!-- TODO: Mostrar estado de adoptado -->
-      <ACFormInput
-        :class="!editing ? 'bg-white border-none px-0' : ''"
-        name="nombre"
-        :disabled="!editing"
-      >
+    <Form ref="form" class="grid grid-cols-1 md:grid-cols-2 gap-x-2 gap-y-2 md:gap-x-8 md:gap-y-4"
+      :validation-schema="schema" @submit="onSubmit">
+      <ACFormInput :class="!editing ? 'bg-white border-none px-0' : ''" name="nombre" :disabled="!editing">
         Nombre
       </ACFormInput>
-      <ACFormInput
-        :class="!editing ? 'bg-white border-none px-0' : ''"
-        name="edad"
-        :disabled="!editing"
-      >
+      <ACFormInput :class="!editing ? 'bg-white border-none px-0' : ''" name="edad" :disabled="!editing">
         Edad
       </ACFormInput>
-      <ACFormInput
-        :class="!editing ? 'bg-white border-none px-0' : ''"
-        name="ubicacion"
-        :disabled="!editing"
-      >
+      <ACFormInput :class="!editing ? 'bg-white border-none px-0' : ''" name="ubicacion" :disabled="!editing">
         Ubicación
       </ACFormInput>
-      <ACFormInput
-        :class="!editing ? 'bg-white border-none px-0' : ''"
-        name="codigo"
-        :required="false"
-        :disabled="!editing"
-      >
+      <ACFormInput :class="!editing ? 'bg-white border-none px-0' : ''" name="codigo" :required="false"
+        :disabled="!editing">
         Código
       </ACFormInput>
-      <ACFormInput
-        :class="!editing ? 'bg-white border-none px-0' : ''"
-        name="peso"
-        :disabled="!editing"
-      >
+      <ACFormInput :class="!editing ? 'bg-white border-none px-0' : ''" name="peso" :disabled="!editing">
         Peso
       </ACFormInput>
+      <ACFormToggle :disabled="!editing" name="adoptado">
+        Adoptado
+      </ACFormToggle>
       <span></span>
-      <ACFormRadio
-        name="genero"
-        :items="['Femenino', 'Masculino']"
-        :disabled="!editing"
-      >
+      <ACFormRadio name="genero" :items="['Femenino', 'Masculino']" :disabled="!editing">
         Género
       </ACFormRadio>
-      <ACFormRadio
-        name="especie"
-        :items="['Gato', 'Perro']"
-        :disabled="!editing"
-      >
+      <ACFormRadio name="especie" :items="['Gato', 'Perro']" :disabled="!editing">
         Especie
       </ACFormRadio>
-      <ACFormMultiLineInput
-        :class="
-          !editing ? 'col-span-2 bg-white border-none px-0' : 'col-span-2'
-        "
-        name="historia"
-        :required="false"
-        :disabled="!editing"
-      >
+      <ACFormMultiLineInput :class="!editing ? 'col-span-2 bg-white border-none px-0' : 'col-span-2'
+        " name="historia" :required="false" :disabled="!editing">
         Historia
       </ACFormMultiLineInput>
       <div class="flex gap-2 items-center col-start-2 justify-self-end">
-        <ACButtonPrimary
-          v-if="editing"
-          class="flex items-center gap-1 w-fit mt-4"
-          type="submit"
-        >
+        <ACButtonPrimary v-if="editing" class="flex items-center gap-1 w-fit mt-4" type="submit">
           <span class="icon-[carbon--save] text-xl"></span>
           Guardar
         </ACButtonPrimary>
-        <ACButtonCancel
-          v-if="editing"
-          @click="onCancelEdit"
-          class="flex items-center gap-1 w-fit mt-4"
-        >
+        <ACButtonCancel v-if="editing" @click="onCancelEdit" class="flex items-center gap-1 w-fit mt-4">
           Cancel
         </ACButtonCancel>
       </div>
