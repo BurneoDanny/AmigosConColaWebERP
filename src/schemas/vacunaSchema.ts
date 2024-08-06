@@ -1,6 +1,6 @@
-import { toTypedSchema } from "@vee-validate/yup"
-import { InferType } from "yup"
-import * as yup from "yup"
+import { toTypedSchema } from "@vee-validate/yup";
+import { InferType } from "yup";
+import * as yup from "yup";
 
 export const schema = yup.object({
   name: yup.string().required("El nombre es obligatorio"),
@@ -12,9 +12,9 @@ export const schema = yup.object({
       const [month, day, anio] = fecha.split("/");
       return `${anio}-${month}-${day}`;
     }),
-  examen_previo: yup.string().required("El examen previo es obligatorio")
-})
+  examen_previo: yup.string().required("El examen previo es obligatorio"),
+});
 
-export const typedSchema = toTypedSchema(schema)
+export const typedSchema = toTypedSchema(schema);
 
-export type Schema = InferType<typeof schema>
+export type Schema = InferType<typeof schema>;

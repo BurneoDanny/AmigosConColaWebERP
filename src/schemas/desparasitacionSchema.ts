@@ -1,6 +1,6 @@
-import { toTypedSchema } from "@vee-validate/yup"
-import * as yup from "yup"
-import { InferType } from "yup"
+import { toTypedSchema } from "@vee-validate/yup";
+import * as yup from "yup";
+import { InferType } from "yup";
 
 export const schema = yup.object({
   tipo: yup
@@ -18,8 +18,8 @@ export const schema = yup.object({
       const [month, day, anio] = fecha.split("/");
       return `${anio}-${month}-${day}`;
     }),
-})
+});
 
-export const typedSchema = toTypedSchema(schema)
+export const typedSchema = toTypedSchema(schema);
 
-export type Schema = InferType<typeof schema>
+export type Schema = InferType<typeof schema>;

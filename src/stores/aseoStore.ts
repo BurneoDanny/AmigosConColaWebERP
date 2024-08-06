@@ -20,7 +20,9 @@ export interface NewAseo {
   tipo: string;
 }
 
-const fetchAseos = async ({ queryKey }: QueryFunctionContext): Promise<Aseo[]> => {
+const fetchAseos = async ({
+  queryKey,
+}: QueryFunctionContext): Promise<Aseo[]> => {
   const res = await apiClient.get<Aseo[]>(`/api/animales/${queryKey[1]}/aseos`);
   return res.data;
 };

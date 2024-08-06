@@ -28,8 +28,11 @@ async function postDesparasitaciones(
   id: number,
   payload: NuevaDesparasitacion,
 ): Promise<Desparasitacion> {
-  const res = await apiClient.post(`/api/animals/${id}/desparasitaciones`, payload);
-  return res.data
+  const res = await apiClient.post(
+    `/api/animals/${id}/desparasitaciones`,
+    payload,
+  );
+  return res.data;
 }
 
 export async function getDesparasitaciones({
@@ -55,7 +58,8 @@ export const useDesparasitaciones = (idAnimal: number) => {
   });
 
   const { mutateAsync, error, isError, isSuccess } = useMutation({
-    mutationFn: async (payload: NuevaDesparasitacion) => postDesparasitaciones(idAnimal, payload),
+    mutationFn: async (payload: NuevaDesparasitacion) =>
+      postDesparasitaciones(idAnimal, payload),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["desparasitaciones", idAnimal],

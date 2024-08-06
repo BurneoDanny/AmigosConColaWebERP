@@ -21,7 +21,10 @@ export interface NewVacuna {
 }
 
 async function postVacuna(id: number, vacuna: NewVacuna): Promise<Vacuna> {
-  const response = await apiClient.post<Vacuna>(`/api/animales/${id}/vacunaciones`, vacuna);
+  const response = await apiClient.post<Vacuna>(
+    `/api/animales/${id}/vacunaciones`,
+    vacuna,
+  );
   return response.data;
 }
 
@@ -29,7 +32,9 @@ async function getVacunas({
   queryKey,
 }: QueryFunctionContext): Promise<Vacuna[]> {
   try {
-    const response = await apiClient.get(`/api/animales/${queryKey[1]}/vacunaciones`);
+    const response = await apiClient.get(
+      `/api/animales/${queryKey[1]}/vacunaciones`,
+    );
     return response.data;
   } catch (error: any) {
     console.error(error.message);

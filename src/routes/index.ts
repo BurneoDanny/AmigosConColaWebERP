@@ -48,15 +48,15 @@ const routes = [
     component: () => import("@pages/NewDesparasitacionPage.vue"),
   },
   {
-    path: '/animales/:id/vacunas',
-    name: 'vacunas',
+    path: "/animales/:id/vacunas",
+    name: "vacunas",
     component: () => import("@pages/VacunasPage.vue"),
   },
   {
-    path: '/animales/:id/vacunas/nuevo',
-    name: 'new-vacuna',
+    path: "/animales/:id/vacunas/nuevo",
+    name: "new-vacuna",
     component: () => import("@pages/NewVacunaPage.vue"),
-  }
+  },
 ];
 
 const router = createRouter({
