@@ -19,6 +19,7 @@ const form = ref<typeof Form | null>(null);
 const animal = useAnimal(id);
 
 const editing = ref(false);
+const nameInput = ref<typeof ACFormInput | null>(null);
 
 const { toast } = useToast();
 
@@ -36,6 +37,11 @@ const resetForm = () => {
 };
 
 watch(animal, () => resetForm());
+
+const onEnableEditing = () => {
+  editing.value = true;
+  setTimeout(() => nameInput.value?.focus(), 100);
+}
 
 const onCancelEdit = () => {
   resetForm();
@@ -66,7 +72,7 @@ const onSubmit: SubmissionHandler<Schema> = async (values) => {
         </h1>
       </div>
       <div class="flex items-center h-full">
-        <ACButtonPrimary @click="editing = true" class="flex items-center gap-2">
+        <ACButtonPrimary @click="onEnableEditing" class="flex items-center gap-2">
           <span class="icon-[uil--edit]"></span>
           Edit
         </ACButtonPrimary>
@@ -74,34 +80,31 @@ const onSubmit: SubmissionHandler<Schema> = async (values) => {
     </div>
     <Form ref="form" class="grid grid-cols-1 md:grid-cols-2 gap-x-2 gap-y-2 md:gap-x-8 md:gap-y-4"
       :validation-schema="schema" @submit="onSubmit">
-      <ACFormInput :class="!editing ? 'bg-white border-none px-0' : ''" name="nombre" :disabled="!editing">
+      <ACFormInput ref="nameInput" name="nombre" :disabled="!editing">
         Nombre
       </ACFormInput>
-      <ACFormInput :class="!editing ? 'bg-white border-none px-0' : ''" name="edad" :disabled="!editing">
+      <ACFormInput name="edad" :disabled="!editing">
         Edad
       </ACFormInput>
-      <ACFormInput :class="!editing ? 'bg-white border-none px-0' : ''" name="ubicacion" :disabled="!editing">
+      <ACFormInput name="ubicacion" :disabled="!editing">
         Ubicación
       </ACFormInput>
-      <ACFormInput :class="!editing ? 'bg-white border-none px-0' : ''" name="codigo" :required="false"
-        :disabled="!editing">
+      <ACFormInput name="codigo" :required="false" :disabled="!editing">
         Código
       </ACFormInput>
-      <ACFormInput :class="!editing ? 'bg-white border-none px-0' : ''" name="peso" :disabled="!editing">
+      <ACFormInput name="peso" :disabled="!editing">
         Peso
       </ACFormInput>
       <ACFormToggle :disabled="!editing" name="adoptado">
         Adoptado
       </ACFormToggle>
-      <span></span>
       <ACFormRadio name="genero" :items="['Femenino', 'Masculino']" :disabled="!editing">
         Género
       </ACFormRadio>
       <ACFormRadio name="especie" :items="['Gato', 'Perro']" :disabled="!editing">
         Especie
       </ACFormRadio>
-      <ACFormMultiLineInput :class="!editing ? 'col-span-2 bg-white border-none px-0' : 'col-span-2'
-        " name="historia" :required="false" :disabled="!editing">
+      <ACFormMultiLineInput class='col-span-2' name="historia" :required="false" :disabled="!editing">
         Historia
       </ACFormMultiLineInput>
       <div class="flex gap-2 items-center col-start-2 justify-self-end">
