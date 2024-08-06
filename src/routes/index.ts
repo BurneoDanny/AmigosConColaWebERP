@@ -29,6 +29,7 @@ const routes = [
   },
   {
     path: "/animales/:id/aseos",
+    name: "aseos",
     component: () => import("@pages/AseosPage.vue"),
   },
   {
@@ -36,6 +37,26 @@ const routes = [
     name: "new-aseo",
     component: () => import("@pages/NewAseoPage.vue"),
   },
+  {
+    path: "/animales/:id/desparasitaciones",
+    name: "desparasitaciones",
+    component: () => import("@pages/DesparasitacionesPage.vue"),
+  },
+  {
+    path: "/animales/:id/desparasitaciones/nuevo",
+    name: "new-desparasitacion",
+    component: () => import("@pages/NewDesparasitacionPage.vue"),
+  },
+  {
+    path: '/animales/:id/vacunas',
+    name: 'vacunas',
+    component: () => null// import("@pages/VacunasPage"),
+  },
+  {
+    path: '/animales/:id/vacunas/nuevo',
+    name: 'new-vacuna',
+    component: () => null// import("@pages/NewVacunaPage"),
+  }
 ];
 
 const router = createRouter({
