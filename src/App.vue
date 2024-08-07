@@ -1,29 +1,31 @@
 <script lang="ts" setup>
-import SideBar from "@/components/SideBar.vue";
+import SideBar from "@/components/common/SideBar.vue";
 import { useRoute } from "vue-router";
 import { computed } from "vue";
-import NavBar from "@/components/NavBar.vue";
-import SearchInput from "@/components/home_page/SearchInput.vue";
+import NavBar from "@/components/common/NavBar.vue";
+import SearchInput from "@/components/common/GlobalSearch.vue";
+import Toast from "@/components/toast/Toast.vue";
+import LoadingSpinnerModal from "@/components/common/LoadingSpinnerModal.vue";
 
 const route = useRoute();
-const shouldShowSideBar = computed(
-  () => route.path !== "/" && route.path !== "/login",
-);
+
 const routerViewClasses = computed(() => ({
   "sm:ml-[5rem]": shouldShowSideBar.value,
 }));
 
-const shouldShowNavbar = computed(() => {
-  return route.path !== "/" && route.path !== "/login";
-});
+const shouldShowSideBar = computed(() => !["/", "/login"].includes(route.path));
+const shouldShowNavbar = computed(() => !["/", "/login"].includes(route.path));
+const isHomePage = computed(() => route.path === "/home");
 </script>
 
 <template>
   <div>
+    <Toast />
+    <LoadingSpinnerModal />
     <SideBar v-if="shouldShowSideBar" />
     <div :class="routerViewClasses">
       <NavBar v-if="shouldShowNavbar">
-        <SearchInput />
+        <SearchInput v-if="isHomePage" />
       </NavBar>
       <RouterView />
     </div>
