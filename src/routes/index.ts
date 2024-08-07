@@ -2,27 +2,70 @@ import { createRouter, createWebHistory } from "vue-router";
 
 const routes = [
   { path: "/", component: () => import("@/pages/LandingPage.vue") },
-  { path: "/home", component: () => import("@/pages/Home.vue") },
-  { path: "/login", component: () => import("@/pages/LoginPage.vue") },
-  { path: "/adopciones", component: () => import("@pages/Adoption.vue") },
-  { path: "/inventario", component: () => import("@pages/Inventory.vue") },
   {
-    path: "/donaciones",
-    component: () => import("@pages/Donation.vue"),
+    name: "home",
+    path: "/home",
+    component: () => import("@pages/HomePage.vue"),
   },
   {
-    path: "/solicitudes-adopciones",
-    component: () => import("@pages/AdoptionRequests.vue"),
+    name: "login",
+    path: "/login",
+    component: () => import("@/pages/LoginPage.vue"),
   },
   {
-    path: "/pet-info/:id",
-    component: () => import("@pages/PetInfo.vue"),
+    name: "inventory",
+    path: "/inventario",
+    component: () => import("@pages/Inventory.vue"),
   },
   {
-    path: "/crear-animal",
+    path: "/animales/nuevo",
     name: "crear-animal",
-    component: () =>
-      import("@pages/animal_registration/AnimalRegistration.vue"),
+    component: () => import("@pages/NewAnimalPage.vue"),
+  },
+  {
+    path: "/animales/:id",
+    name: "animal-details",
+    component: () => import("@pages/AnimalDetailsPage.vue"),
+  },
+  {
+    path: "/animales/:id/aseos",
+    name: "aseos",
+    component: () => import("@pages/AseosPage.vue"),
+  },
+  {
+    path: "/animales/:id/aseos/nuevo",
+    name: "new-aseo",
+    component: () => import("@pages/NewAseoPage.vue"),
+  },
+  {
+    path: "/animales/:id/desparasitaciones",
+    name: "desparasitaciones",
+    component: () => import("@pages/DesparasitacionesPage.vue"),
+  },
+  {
+    path: "/animales/:id/desparasitaciones/nuevo",
+    name: "new-desparasitacion",
+    component: () => import("@pages/NewDesparasitacionPage.vue"),
+  },
+  {
+    path: "/animales/:id/vacunas",
+    name: "vacunas",
+    component: () => import("@pages/VacunasPage.vue"),
+  },
+  {
+    path: "/animales/:id/vacunas/nuevo",
+    name: "new-vacuna",
+    component: () => import("@pages/NewVacunaPage.vue"),
+  },
+  {
+    path: "/animales/:id/pesos",
+    name: "pesos",
+    component: () => import("@pages/PesosPage.vue"),
+  },
+  {
+    path: "/animales/:id/pesos/nuevo",
+    name: "new-peso",
+    component: () => import("@pages/NewPesoPage.vue"),
   },
 ];
 
