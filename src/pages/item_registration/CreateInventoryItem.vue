@@ -14,7 +14,9 @@ const schema = yup.object({
     .min(3, "Debe tener al menos 3 caracteres")
     .max(10, "Debe tener máximo 10 caracteres")
     .required("Por favor, ingrese un nombre."),
-  ingrediente: yup.string().required("Por favor, ingrese un ingrediente."),
+  ingrediente_principal: yup
+    .string()
+    .required("Por favor, ingrese un ingrediente."),
   laboratorio: yup
     .string()
     .required("Por favor, ingrese el nombre de un laboratorio"),
@@ -47,10 +49,9 @@ const schema = yup.object({
     .nullable()
     .transform((curr, orig) => (orig === "" ? null : curr)),
   origen: yup.string().required("Obligatorio"),
-  vadm: yup.string().required("Obligatorio"),
+  via: yup.string().required("Obligatorio"),
   estado: yup.string().required("Obligatorio"),
-  clasificacion: yup.string().required("Obligatorio"),
-  codigo: yup.string(),
+  tipo: yup.string().required("Obligatorio"),
 });
 const inventoryRegistrationSchema = toTypedSchema(schema);
 
@@ -204,18 +205,21 @@ const onSubmit = async (values: InferType<typeof schema>) => {
         <div class="w-full lg:w-1/2 flex flex-col lg:px-24 mb-4">
           <label
             class="mr-[0.19rem] w-[10rem] md:mr-[1.3rem] sm:mr-[0.6rem] lg:mr-[0.05rem] flex sm:w-[6.5rem] lg:w-52 md:w-52 font-medium text-gray-900 text-[0.8rem] sm:text-[0.8rem] md:text-[1rem] lg:text-[1.2rem]"
-            for="ingrediente"
+            for="ingrediente_principal"
             >Ingrediente Principal
           </label>
           <Field
             type="text"
-            name="ingrediente"
+            name="ingrediente_principal"
             placeholder="Ingrediente Principal"
-            id="ingrediente"
+            id="ingrediente_principal"
             class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             required
           />
-          <ErrorMessage name="ingrediente" class="text-red-600 text-left" />
+          <ErrorMessage
+            name="ingrediente_principal"
+            class="text-red-600 text-left"
+          />
         </div>
 
         <div class="w-full lg:w-1/2 flex flex-col lg:px-24 mb-4">
@@ -341,11 +345,11 @@ const onSubmit = async (values: InferType<typeof schema>) => {
           <Field
             v-slot="{ value, field, errorMessage }"
             :validate-on-input="true"
-            name="vadm"
+            name="via"
           >
             <label
               class="mr-[0.19rem] w-[10rem] md:mr-[1.3rem] sm:mr-[0.6rem] lg:mr-[0.05rem] flex sm:w-[6.5rem] lg:w-52 md:w-52 font-medium text-gray-900 text-[0.8rem] sm:text-[0.8rem] md:text-[1rem] lg:text-[1.2rem]"
-              for="vadm"
+              for="via"
               >V/Adm
             </label>
             <div class="flex flex-col w-full">
@@ -384,11 +388,11 @@ const onSubmit = async (values: InferType<typeof schema>) => {
           <Field
             v-slot="{ value, field, errorMessage }"
             :validate-on-input="true"
-            name="clasificacion"
+            name="tipo"
           >
             <label
               class="mr-[0.19rem] w-[10rem] md:mr-[1.3rem] sm:mr-[0.6rem] lg:mr-[0.05rem] flex sm:w-[6.5rem] lg:w-52 md:w-52 font-medium text-gray-900 text-[0.8rem] sm:text-[0.8rem] md:text-[1rem] lg:text-[1.2rem]"
-              for="clasificacion"
+              for="tipo"
               >Clasificación
             </label>
             <div class="flex flex-col w-full">
