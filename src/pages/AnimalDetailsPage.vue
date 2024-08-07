@@ -102,6 +102,12 @@ const onSubmit: SubmissionHandler<Schema> = async (values) => {
         >
           Vacunas
         </RouterLink>
+        <RouterLink
+          :to="{ name: 'pesos', params: { id } }"
+          class="bg-primary/20 hover:bg-primary-dark/20 text-primary text-sm font-medium px-2.5 py-0.5 rounded border border-primary-dark inline-flex items-center justify-center"
+        >
+          Pesos
+        </RouterLink>
       </div>
     </div>
     <Form
@@ -113,14 +119,14 @@ const onSubmit: SubmissionHandler<Schema> = async (values) => {
       <ACFormInput ref="nameInput" name="nombre" :disabled="!editing">
         Nombre
       </ACFormInput>
-      <ACFormInput name="edad" :disabled="!editing"> Edad </ACFormInput>
+      <ACFormInput name="edad" :disabled="!editing"> Edad</ACFormInput>
       <ACFormInput name="ubicacion" :disabled="!editing">
         Ubicación
       </ACFormInput>
       <ACFormInput name="codigo" :required="false" :disabled="!editing">
         Código
       </ACFormInput>
-      <ACFormInput name="peso" :disabled="!editing"> Peso </ACFormInput>
+      <ACFormInput name="peso" :disabled="!editing"> Peso</ACFormInput>
       <ACFormToggle :disabled="!editing" name="adoptado">
         Adoptado
       </ACFormToggle>

@@ -57,6 +57,16 @@ const routes = [
     name: "new-vacuna",
     component: () => import("@pages/NewVacunaPage.vue"),
   },
+  {
+    path: "/animales/:id/pesos",
+    name: "pesos",
+    component: () => import("@pages/PesosPage.vue"),
+  },
+  {
+    path: "/animales/:id/pesos/nuevo",
+    name: "new-peso",
+    component: () => import("@pages/NewPesoPage.vue"),
+  },
 ];
 
 const router = createRouter({
